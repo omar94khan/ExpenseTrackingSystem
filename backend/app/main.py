@@ -31,12 +31,24 @@ def create_user(
     return crud.create_user(db, user, hashed_password)
 
 
-@app.get('/users/{id}', response_model = schemas.UserOut)
+@app.get('/users/usercode={id}', response_model = schemas.UserOut)
 def get_user_by_code(
-    user: schemas.UserGet,
+    user: schemas.UserGetByCode,
     db: Session = Depends(get_db)
 ):
     db_user = crud.get_user(db, user.usercode)
+    
+    if not db_user:
+        raise HTTPException(status_code=400, detail="User doesn't exists")
+    return crud.get_user(db, user)
+
+
+@app.get('/users/username={username}', response_model = schemas.UserOut)
+def get_user_by_username(
+    user: schemas.UserGetByUsername,
+    db: Session = Depends(get_db)
+):
+    db_user = crud.get_user_by_username(db, user.username)
     
     if not db_user:
         raise HTTPException(status_code=400, detail="User doesn't exists")

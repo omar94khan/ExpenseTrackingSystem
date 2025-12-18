@@ -23,14 +23,6 @@ class UserOut(BaseModel):
     class Config:
         orm_mode = True  # allows SQLAlchemy objects to be returned directly
 
-# Response Schema
-class UserOutWithPass(BaseModel):
-    id: int
-    username: str
-    hashed_password: str
-
-    class Config:
-        orm_mode = True  # allows SQLAlchemy objects to be returned directly
 
 class TransactionOut(BaseModel):
     id: int
