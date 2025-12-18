@@ -15,7 +15,7 @@ class Transactions(Base):
     __tablename__ = "transactions"
 
     id = Column(Integer, primary_key=True)
-    transaction_user = relationship("Users")
+    transaction_user = relationship("Users", backref="transactions")
     user_id = Column(Integer, ForeignKey("users.id"), nullable=False)
     amount = Column(Float, nullable=False)
     transaction_type = Column(String, nullable = False)
@@ -23,6 +23,5 @@ class Transactions(Base):
     date = Column(Date, nullable = False)
     description = Column(String)
 
-Base.metadata.create_all(engine)
     
  
