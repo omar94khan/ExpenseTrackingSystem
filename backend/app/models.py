@@ -16,7 +16,7 @@ class Transactions(Base):
 
     id = Column(Integer, primary_key=True)
     transaction_user = relationship("Users")
-    user_id = Column(Integer, ForeignKey("users.id"))
+    user_id = Column(Integer, ForeignKey("users.id"), nullable=False)
     amount = Column(Float, nullable=False)
     transaction_type = Column(String, nullable = False)
     category = Column(String)
@@ -25,3 +25,4 @@ class Transactions(Base):
 
 Base.metadata.create_all(engine)
     
+ 
