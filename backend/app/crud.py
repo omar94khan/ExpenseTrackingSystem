@@ -19,7 +19,7 @@ def get_user_by_username(db: Session, username: str):
 
 def delete_user(db: Session, user_id: int):
     
-    user = db.query(Users).filter(Users.id == user_id).all()
+    user = db.query(Users).filter(Users.id == user_id).first()
     if not user:
         return None
     
@@ -31,6 +31,10 @@ from models import Transactions
 from schemas import TransactionCreate
 
 def create_transaction(db: Session, transaction: TransactionCreate):
+    user = db.query(Users).filter(Users.id == transaction.user_id).first()
+    if not user:
+        return None
+
     db_transaction = Transactions(**transaction.model_dump())
     db.add(db_transaction)
     db.commit()
@@ -42,7 +46,7 @@ def get_transactions(db: Session, user_id: int):
 
 def delete_transaction(db: Session, transaction_id: int):
     
-    transaction = db.query(Transactions).filter(Transactions.id == transaction_id).all()
+    transaction = db.query(Transactions).filter(Transactions.id == transaction_id).first()
     if not transaction:
         return None
     
