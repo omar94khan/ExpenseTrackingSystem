@@ -30,12 +30,12 @@ def delete_user(db: Session, user_id: int):
 from models import Transactions
 from schemas import TransactionCreate
 
-def create_transaction(db: Session, transaction: TransactionCreate):
-    user = db.query(Users).filter(Users.id == transaction.user_id).first()
+def create_transaction(db: Session, transaction: TransactionCreate, user_id: int):
+    user = db.query(Users).filter(Users.id == user_id).first()
     if not user:
         return None
 
-    db_transaction = Transactions(**transaction.model_dump())
+    db_transaction = Transactions(user_id = user_id, **transaction.model_dump())
     db.add(db_transaction)
     db.commit()
     db.refresh(db_transaction)
