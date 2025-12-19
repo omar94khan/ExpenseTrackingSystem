@@ -8,7 +8,6 @@ class UserCreate(BaseModel):
     password: str  # plaintext for request; you will hash it before saving
 
 class TransactionCreate(BaseModel):
-    user_id: int
     amount: float
     transaction_type: str
     category: Optional[str] = None
@@ -39,4 +38,3 @@ class TransactionOut(BaseModel):
 class Token(BaseModel):
     access_token : str
     token_type : str
-    

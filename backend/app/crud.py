@@ -1,6 +1,6 @@
 from sqlalchemy.orm import Session
-from models import Users
-from schemas import UserCreate
+from .models import Users, Transactions
+from .schemas import UserCreate, TransactionCreate
 
 def create_user(db: Session, user: UserCreate, hashed_password: str):
     db_user = Users(username=user.username, hashed_password=hashed_password)
@@ -27,8 +27,6 @@ def delete_user(db: Session, user_id: int):
     db.commit()
     return user
 
-from models import Transactions
-from schemas import TransactionCreate
 
 def create_transaction(db: Session, transaction: TransactionCreate, user_id: int):
     user = db.query(Users).filter(Users.id == user_id).first()
@@ -53,3 +51,6 @@ def delete_transaction(db: Session, transaction_id: int):
     db.delete(transaction)
     db.commit()
     return transaction
+
+def get_transaction_by_id(db: Session, transaction_id: int):
+    return db.query(Transactions).filter(Transactions.id == transaction_id).first()

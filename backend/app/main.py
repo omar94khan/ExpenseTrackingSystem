@@ -1,14 +1,11 @@
 from fastapi import FastAPI, Depends, HTTPException
 from sqlalchemy.orm import Session
-from database import engine, Base
-from database import SessionLocal
-import schemas
-import crud
-from security import hash_password, verify_password
+from .database import engine, Base, SessionLocal
+from . import schemas, crud, security
+from .security import hash_password, verify_password
 from fastapi import status
 from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
 from jose import JWTError
-import security
 
 ##############################################################################################################
 
@@ -116,9 +113,13 @@ def get_user_by_username(
 @app.delete('/users/{user_id}', response_model = schemas.UserOut)
 def delete_user(
     user_id: int,
-    db: Session = Depends(get_db)
+    db: Session = Depends(get_db),
+    current_user = Depends(get_current_user)
 ):
     
+    if current_user.id != user_id:
+        raise HTTPException(status_code=403, detail="Not authorized to delete this user")
+
     deleted_user = crud.delete_user(db,user_id)
 
     if not deleted_user:
@@ -176,23 +177,5 @@ def delete_transaction(
         raise HTTPException(status_code=404, detail=f"No transactions found against the given Transaction ID: {transaction_id}")
 
     return db_transactions
-
-##############################################################################################################
-
-@app.get("/verifylogin", response_model = bool)
-def verify_login(
-    username: str,
-    password: str,
-    db: Session = Depends(get_db)
-):
-    db_user = crud.get_user_by_username(db, username)
-
-    if not db_user:
-        raise HTTPException(status_code= 401, detail= "Username of Password not correct. Please try again.")
-
-    if verify_password(password, db_user.hashed_password):
-        return True
-    else:
-        raise HTTPException(status_code= 401, detail= "Username of Password not correct. Please try again.")
 
 ##############################################################################################################
