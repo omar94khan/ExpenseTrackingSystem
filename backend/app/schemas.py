@@ -42,7 +42,7 @@ class Token(BaseModel):
 
 class ReportOut(BaseModel):
     number_of_transactions: int
-    transation_month: str
+    transaction_month: str
     total_income: float
     total_expense: float
     net_balance: float

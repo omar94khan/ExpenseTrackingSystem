@@ -5,7 +5,7 @@ def validate_transaction_amount(amount: float):
 
 def validate_transaction_type(category: str):
     valid_types = {"income", "expense", "transfer"}
-    if category not in valid_types:
+    if category.lower() not in valid_types:
         raise ValueError(f"Transaction type must be one of {valid_types}.")
     return category
 
@@ -17,7 +17,6 @@ def validate_username(username: str):
     return username
 
 def validate_password(password: str):
-    print(password)
     if len(password) < 6:
         raise ValueError("Password must be at least 6 characters long.")
     return password
