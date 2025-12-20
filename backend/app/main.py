@@ -1,11 +1,13 @@
 from fastapi import FastAPI, Depends, HTTPException
 from sqlalchemy.orm import Session
+from sqlalchemy import func
 from .database import engine, Base, SessionLocal
-from . import schemas, crud, security
-from .security import hash_password, verify_password
+from . import schemas, crud, security, validations, analysis
 from fastapi import status
 from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
 from jose import JWTError
+from datetime import date
+import datetime as dt
 
 ##############################################################################################################
 
@@ -73,10 +75,24 @@ def create_user(
     user: schemas.UserCreate,
     db: Session = Depends(get_db)
 ):
+    
+    try:
+        validations.validate_username(user.username)
+    except:
+        raise HTTPException(status_code=400, detail="Invalid username")
+
     db_user = crud.get_user_by_username(db, user.username)
     if db_user:
         raise HTTPException(status_code=400, detail="Username already exists")
 
+    try:
+        validations.validate_password(user.password)
+    except:
+        raise HTTPException(status_code=400, detail="Password must be at least 6 characters long")
+    
+    if not user.created_on:
+        user.created_on = date.today()
+    
     hashed_password = security.hash_password(user.password)
     return crud.create_user(db, user, hashed_password)
 
@@ -135,6 +151,17 @@ def create_transaction(
     db: Session = Depends(get_db),
     current_user = Depends(get_current_user)
 ):
+    
+    try:
+        validations.validate_transaction_amount(transaction.amount)
+    except:
+        raise HTTPException(status_code=400, detail="Invalid transaction amount")
+
+    try:
+        validations.validate_transaction_type(transaction.transaction_type)
+    except:
+        raise HTTPException(status_code=400, detail="Invalid transaction type")
+
     db_transaction = crud.create_transaction(db, transaction, current_user.id)
 
     if not db_transaction:
@@ -153,7 +180,7 @@ def get_transactions(
 
     if not db_transactions:
         return []
-
+    print(db_transactions)
     return db_transactions
 
 ##############################################################################################################
@@ -179,3 +206,25 @@ def delete_transaction(
     return db_transactions
 
 ##############################################################################################################
+
+@app.get("/fetch-report/")
+def get_report(
+    from_date: date = date.today() - dt.timedelta(days=30),
+    to_date: date = date.today(),
+    db: Session = Depends(get_db),
+    current_user = Depends(get_current_user)
+):
+    transactions = crud.fetch_report(db, current_user.id, from_date, to_date)
+
+    if not transactions:
+        return []
+    
+    
+    # Analyze transactions
+    
+    output = analysis.analyze_report(transactions)
+
+    return output
+
+##############################################################################################################
+

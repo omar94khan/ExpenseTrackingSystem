@@ -6,6 +6,7 @@ from typing import Optional
 class UserCreate(BaseModel):
     username: str
     password: str  # plaintext for request; you will hash it before saving
+    created_on: Optional[date] = None
 
 class TransactionCreate(BaseModel):
     amount: float
@@ -38,3 +39,15 @@ class TransactionOut(BaseModel):
 class Token(BaseModel):
     access_token : str
     token_type : str
+
+class ReportOut(BaseModel):
+    number_of_transactions: int
+    transation_month: str
+    total_income: float
+    total_expense: float
+    net_balance: float
+    most_common_expense_category: Optional[str]
+
+    class Config:
+        orm_mode = True
+

@@ -1,6 +1,6 @@
-from sqlalchemy import Column, Integer, String, Date, ForeignKey, Float
+from sqlalchemy import Column, Integer, String, Date, ForeignKey, Float, DateTime
 from sqlalchemy.orm import relationship
-from .database import Base, engine
+from .database import Base
 
 
 class Users(Base):
@@ -9,6 +9,7 @@ class Users(Base):
     id = Column(Integer, primary_key=True)
     username = Column(String, nullable=False)
     hashed_password = Column(String, nullable=False)
+    created_on = Column(DateTime, nullable=True)
     
 
 class Transactions(Base):
