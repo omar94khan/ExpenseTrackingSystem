@@ -1,0 +1,80 @@
+from fastapi import APIRouter, Depends, HTTPException
+from sqlalchemy.orm import Session
+from datetime import date
+
+from .. import crud, schemas, security, validations
+from ..deps import get_db, get_current_user
+
+router = APIRouter(prefix="/users", tags=["users"])
+
+
+@router.post("", response_model=schemas.UserOut)
+def create_user(
+    user: schemas.UserCreate,
+    db: Session = Depends(get_db)
+):
+    
+    try:
+        validations.validate_username(user.username)
+    except:
+        raise HTTPException(status_code=400, detail="Invalid username")
+
+    db_user = crud.get_user_by_username(db, user.username)
+    if db_user:
+        raise HTTPException(status_code=400, detail="Username already exists")
+
+    try:
+        validations.validate_password(user.password)
+    except:
+        raise HTTPException(status_code=400, detail="Password must be at least 6 characters long")
+    
+    if not user.created_on:
+        user.created_on = date.today()
+    
+    hashed_password = security.hash_password(user.password)
+    return crud.create_user(db, user, hashed_password)
+
+
+@router.get('/{user_id}', response_model = schemas.UserOut)
+def get_user_by_code(
+    user_id: int,
+    db: Session = Depends(get_db)
+):
+    db_user = crud.get_user(db, user_id)
+    
+    if not db_user:
+        raise HTTPException(status_code=404, detail="User doesn't exists")
+    
+    return db_user
+
+
+@router.get('/by-username/{username}', response_model = schemas.UserOut)
+def get_user_by_username(
+    username: str,
+    db: Session = Depends(get_db)
+):
+    db_user = crud.get_user_by_username(db, username)
+    
+    if not db_user:
+        raise HTTPException(status_code=404, detail="User doesn't exists")
+    
+    return db_user
+
+
+
+@router.delete('/{user_id}', response_model = schemas.UserOut)
+def delete_user(
+    user_id: int,
+    db: Session = Depends(get_db),
+    current_user = Depends(get_current_user)
+):
+    
+    if current_user.id != user_id:
+        raise HTTPException(status_code=403, detail="Not authorized to delete this user")
+
+    deleted_user = crud.delete_user(db,user_id)
+
+    if not deleted_user:
+        raise HTTPException(status_code=404, detail="User doesn't exists")
+    
+    return deleted_user

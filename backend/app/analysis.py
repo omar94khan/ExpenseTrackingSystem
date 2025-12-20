@@ -8,8 +8,9 @@ def model_to_dict(obj):
 def analyze_report(transactions):
     df = pd.DataFrame([model_to_dict(t) for t in transactions])
 
-    # optional: ensure date is string for JSON
+    # optional: ensure date is string for JSON and all transaction types are lowercase
     df["date"] = pd.to_datetime(df["date"]).dt.date.astype(str)
+    df["transaction_type"] = df["transaction_type"].str.lower()
 
     # return df
     if df.empty:

@@ -7,7 +7,7 @@ def validate_transaction_type(category: str):
     valid_types = {"income", "expense", "transfer"}
     if category.lower() not in valid_types:
         raise ValueError(f"Transaction type must be one of {valid_types}.")
-    return category
+    return category.lower().capitalize()
 
 def validate_username(username: str):
     if len(username) < 3 or len(username) > 25:
