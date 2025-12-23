@@ -20,3 +20,16 @@ def login(form_data: OAuth2PasswordRequestForm = Depends(), db: Session = Depend
     # Put user identity in the token (sub = subject)
     token = security.create_access_token({"sub": str(user.id)})
     return {"access_token": token, "token_type": "bearer"}
+
+@router.post("/login-json", response_model=schemas.Token)
+def login_json(payload : schemas.LoginRequest, db: Session = Depends(get_db)):
+    user = crud.get_user_by_username(db, payload.username)
+    if not user or not security.verify_password(payload.password, user.hashed_password):
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="Invalid credentials",
+            headers={"WWW-Authenticate": "Bearer"},
+        )
+    # Put user identity in the token (sub = subject)
+    token = security.create_access_token({"sub": str(user.id)})
+    return {"access_token": token, "token_type": "bearer"}

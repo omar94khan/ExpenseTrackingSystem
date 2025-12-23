@@ -2,6 +2,11 @@ from pydantic import BaseModel
 from datetime import date
 from typing import Optional
 
+# Login JSON Schema
+class LoginRequest(BaseModel):
+    username: str
+    password: str
+
 # Request Schema
 class UserCreate(BaseModel):
     username: str

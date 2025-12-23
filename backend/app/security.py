@@ -1,6 +1,7 @@
 from datetime import datetime, timedelta, timezone
 from jose import JWTError, jwt
 from passlib.context import CryptContext
+from .config import SECRET_KEY, ALGORITHM, ACCESS_TOKEN_EXPIRE_MINUTES
 
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated = "auto")
 
@@ -15,12 +16,6 @@ def verify_password(
         hashed_password: str
 ) -> bool:
     return pwd_context.verify(plain_password, hashed_password)
-
-
-# --- JWT config ---
-SECRET_KEY = "1d5as61f561g561gdfa4g51g5615f6sda23"   # move to env var later
-ALGORITHM = "HS256"
-ACCESS_TOKEN_EXPIRE_MINUTES = 60
 
 def create_access_token(
         data: dict,
