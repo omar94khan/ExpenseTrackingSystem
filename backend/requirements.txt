@@ -1,0 +1,6 @@
+fastapi
+uvicorn[standard]
+sqlalchemy
+pandas
+python-jose[cryptography]
+passlib[bcrypt]
