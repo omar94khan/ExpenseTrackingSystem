@@ -71,24 +71,3 @@ def delete_transaction(
     return db_transactions
 
 ##############################################################################################################
-
-@router.get("/fetch-report/")
-def get_report(
-    from_date: date = date.today() - dt.timedelta(days=30),
-    to_date: date = date.today(),
-    db: Session = Depends(get_db),
-    current_user = Depends(get_current_user)
-):
-    transactions = crud.fetch_report(db, current_user.id, from_date, to_date)
-
-    if not transactions:
-        return []
-    
-    
-    # Analyze transactions
-    
-    output = analysis.analyze_report(transactions)
-
-    return output
-
-##############################################################################################################

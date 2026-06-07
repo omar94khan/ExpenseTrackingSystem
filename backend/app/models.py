@@ -1,4 +1,4 @@
-from sqlalchemy import Column, Integer, String, Date, ForeignKey, Float, DateTime
+from sqlalchemy import Column, Integer, String, Date, ForeignKey, Float
 from sqlalchemy.orm import relationship
 from .database import Base
 
@@ -9,7 +9,7 @@ class Users(Base):
     id = Column(Integer, primary_key=True)
     username = Column(String, nullable=False)
     hashed_password = Column(String, nullable=False)
-    created_on = Column(DateTime, nullable=True)
+    created_on = Column(Date, nullable=True)
     
 
 class Transactions(Base):

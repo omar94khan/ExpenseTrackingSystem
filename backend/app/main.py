@@ -1,6 +1,6 @@
 from fastapi import FastAPI
 from .database import engine, Base
-from .routes import auth, transactions, users
+from .routes import auth, transactions, users, reports
 from fastapi.middleware.cors import CORSMiddleware
 from .config import CORS_ORIGINS
 
@@ -18,3 +18,4 @@ app.add_middleware(
 app.include_router(auth.router)
 app.include_router(users.router)
 app.include_router(transactions.router)
+app.include_router(reports.router)
