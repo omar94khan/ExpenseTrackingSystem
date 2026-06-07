@@ -1,4 +1,4 @@
-from pydantic import BaseModel
+from pydantic import BaseModel, field_validator
 from datetime import date
 from typing import Optional
 
@@ -19,6 +19,24 @@ class TransactionCreate(BaseModel):
     category: Optional[str] = None
     date: date
     description: Optional[str] = None
+
+    @field_validator("transaction_type")
+    @classmethod
+    def normalize_transaction_type(cls, v):
+        if not isinstance(v, str):
+            raise ValueError("transaction_type must be a string")
+        if v is None:
+            raise ValueError("transaction_type cannot be null")
+        if v.lower() not in {"income", "expense","transfer"}:
+            raise ValueError("transaction_type must be 'income' or 'expense' or 'transfer'")
+        return v.lower().capitalize()
+    
+    @field_validator("amount")
+    @classmethod
+    def validate_amount(cls, v):
+        if v <= 0:
+            raise ValueError("Amount must be greater than 0")
+        return v
 
 # Response Schema
 class UserOut(BaseModel):

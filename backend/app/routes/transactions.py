@@ -17,16 +17,6 @@ def create_transaction(
     current_user = Depends(get_current_user)
 ):
     
-    try:
-        validations.validate_transaction_amount(transaction.amount)
-    except:
-        raise HTTPException(status_code=400, detail="Invalid transaction amount")
-
-    try:
-        validations.validate_transaction_type(transaction.transaction_type)
-    except:
-        raise HTTPException(status_code=400, detail="Invalid transaction type")
-
     db_transaction = crud.create_transaction(db, transaction, current_user.id)
 
     if not db_transaction:

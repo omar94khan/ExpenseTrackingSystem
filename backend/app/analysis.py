@@ -42,7 +42,4 @@ def analyze_report(transactions):
     # optional: sort newest->oldest and use month label as index
     out = out.sort_values("month", ascending=False).drop(columns=["month"]).set_index("transaction_month")
 
-    out
-
-
     return out.to_dict(orient="index")
