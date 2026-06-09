@@ -40,7 +40,7 @@ class TransactionCreate(BaseModel):
 
 # Response Schema
 class UserOut(BaseModel):
-    model_confgig = ConfigDict(from_attributes=True)  # allows SQLAlchemy objects to be returned directly
+    model_config = ConfigDict(from_attributes=True)  # allows SQLAlchemy objects to be returned directly
 
     id: int
     username: str
@@ -50,7 +50,7 @@ class UserOut(BaseModel):
 
 
 class TransactionOut(BaseModel):
-    model_confgig = ConfigDict(from_attributes=True)  # allows SQLAlchemy objects to be returned directly
+    model_config = ConfigDict(from_attributes=True)  # allows SQLAlchemy objects to be returned directly
 
     id: int
     user_id: int
@@ -68,7 +68,7 @@ class Token(BaseModel):
     token_type : str
 
 class ReportOut(BaseModel):
-    model_confgig = ConfigDict(from_attributes=True)  # allows SQLAlchemy objects to be returned directly
+    model_config = ConfigDict(from_attributes=True)  # allows SQLAlchemy objects to be returned directly
 
     number_of_transactions: int
     transaction_month: str
