@@ -8,7 +8,7 @@ from ..deps import get_db, get_current_user
 router = APIRouter(prefix="/users", tags=["users"])
 
 
-@router.post("", response_model=schemas.UserOut)
+@router.post("/create", response_model=schemas.UserOut)
 def create_user(
     user: schemas.UserCreate,
     db: Session = Depends(get_db)
@@ -16,8 +16,8 @@ def create_user(
     
     try:
         validations.validate_username(user.username)
-    except:
-        raise HTTPException(status_code=400, detail="Invalid username")
+    except ValueError as e:
+        raise HTTPException(status_code=400, detail="Invalid username. " + str(e))
 
     db_user = crud.get_user_by_username(db, user.username)
     if db_user:
@@ -25,8 +25,8 @@ def create_user(
 
     try:
         validations.validate_password(user.password)
-    except:
-        raise HTTPException(status_code=400, detail="Password must be at least 6 characters long")
+    except ValueError as e:
+        raise HTTPException(status_code=400, detail="Password invalid. " + str(e))
     
     if not user.created_on:
         user.created_on = date.today()
@@ -35,7 +35,7 @@ def create_user(
     return crud.create_user(db, user, hashed_password)
 
 
-@router.get('/{user_id}', response_model = schemas.UserOut)
+@router.get('/fetch/{user_id}', response_model = schemas.UserOut)
 def get_user_by_code(
     user_id: int,
     db: Session = Depends(get_db)
@@ -62,7 +62,7 @@ def get_user_by_username(
 
 
 
-@router.delete('/{user_id}', response_model = schemas.UserOut)
+@router.delete('/delete/{user_id}', response_model = schemas.UserOut)
 def delete_user(
     user_id: int,
     db: Session = Depends(get_db),

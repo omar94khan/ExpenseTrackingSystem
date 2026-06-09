@@ -3,7 +3,7 @@ from sqlalchemy.orm import Session
 from datetime import date
 import datetime as dt
 
-from .. import crud, schemas, validations, analysis
+from .. import crud, schemas, analysis
 from ..deps import get_db, get_current_user
 
 router = APIRouter(prefix="/reports", tags=["reports"])

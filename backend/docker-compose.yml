@@ -8,7 +8,7 @@ services:
       - "8000:8000"
     volumes:
       - ./app:/app/app
-      - sqlite_data:/app/transactions_data
+      - sqlite_data:/database
     command: >
       uvicorn app.main:app --host 0.0.0.0 --port 8000 --reload
 
