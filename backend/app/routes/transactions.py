@@ -3,14 +3,14 @@ from sqlalchemy.orm import Session
 from datetime import date
 import datetime as dt
 
-from .. import crud, schemas, validations, analysis
+from .. import crud, schemas, analysis
 from ..deps import get_db, get_current_user
 
 router = APIRouter(prefix="/transactions", tags=["transactions"])
 
 ##############################################################################################################
 
-@router.post("/", response_model=schemas.TransactionOut)
+@router.post("/create", response_model=schemas.TransactionOut)
 def create_transaction(
     transaction: schemas.TransactionCreate,
     db: Session = Depends(get_db),
@@ -26,7 +26,7 @@ def create_transaction(
 
 ##############################################################################################################
 
-@router.get("/", response_model=list[schemas.TransactionOut])
+@router.get("/fetch", response_model=list[schemas.TransactionOut])
 def get_transactions(
     db: Session = Depends(get_db),
     current_user = Depends(get_current_user)
@@ -40,7 +40,7 @@ def get_transactions(
 
 ##############################################################################################################
 
-@router.delete("/{transaction_id}", response_model=schemas.TransactionOut)
+@router.delete("/delete/{transaction_id}", response_model=schemas.TransactionOut)
 def delete_transaction(
     transaction_id: int,
     db: Session = Depends(get_db),

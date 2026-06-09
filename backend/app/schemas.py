@@ -1,4 +1,4 @@
-from pydantic import BaseModel, field_validator
+from pydantic import BaseModel, field_validator, ConfigDict
 from datetime import date
 from typing import Optional
 
@@ -40,14 +40,18 @@ class TransactionCreate(BaseModel):
 
 # Response Schema
 class UserOut(BaseModel):
+    model_confgig = ConfigDict(from_attributes=True)  # allows SQLAlchemy objects to be returned directly
+
     id: int
     username: str
 
-    class Config:
-        orm_mode = True  # allows SQLAlchemy objects to be returned directly
+    # class Config:
+    #     orm_mode = True  # allows SQLAlchemy objects to be returned directly
 
 
 class TransactionOut(BaseModel):
+    model_confgig = ConfigDict(from_attributes=True)  # allows SQLAlchemy objects to be returned directly
+
     id: int
     user_id: int
     amount: float
@@ -56,14 +60,16 @@ class TransactionOut(BaseModel):
     date: date
     description: Optional[str]
 
-    class Config:
-        orm_mode = True
+    # class Config:
+    #     orm_mode = True
 
 class Token(BaseModel):
     access_token : str
     token_type : str
 
 class ReportOut(BaseModel):
+    model_confgig = ConfigDict(from_attributes=True)  # allows SQLAlchemy objects to be returned directly
+
     number_of_transactions: int
     transaction_month: str
     total_income: float
@@ -71,6 +77,6 @@ class ReportOut(BaseModel):
     net_balance: float
     most_common_expense_category: Optional[str]
 
-    class Config:
-        orm_mode = True
+    # class Config:
+    #     orm_mode = True
 
