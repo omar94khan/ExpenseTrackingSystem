@@ -206,12 +206,12 @@
                 const nameVal = document.getElementById("name").value;
                 const cifVal = document.getElementById("cif").value;
 
-                const username = "ASBB_UAT_SVC_ACC_BASICAUTH";
-                const password = "af9affae-fdb0-4ae0-acd9-56c48b599c40";
+                const username = "";
+                const password = "";
 
                 const encoded = btoa(username + ":" + password);
 
-                const response = await fetch("https://uat3-asb-axyk27rquuiu-dx.integration.me-dubai-1.ocp.oraclecloud.com:443/ic/api/integration/v1/flows/rest/AFS_LISTALLCARDSBYCI/1.0/", {
+                const response = await fetch("", {
                     method: "POST",
                     headers: {
                         "Authorization": "Basic " + encoded,
