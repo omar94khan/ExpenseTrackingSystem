@@ -192,8 +192,32 @@
             </select>
         </div>
 
-        <div>
-            <p id="result">Response here</p>
+        <div id="result">
+            <h3>Debit Cards</h3>
+            <table id="debit-table" class="borderedtable">
+                <thead>
+                    <tr>
+                        <th>Card Number</th>
+                        <th>Expiry</th>
+                        <th>Cardholder</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+                <tbody id="debit-body"></tbody>
+            </table>
+
+            <h3>Credit Cards</h3>
+            <table id="credit-table" class="borderedtable">
+                <thead>
+                    <tr>
+                        <th>Card Number</th>
+                        <th>Product</th>
+                        <th>Status</th>
+                        <th>Currency</th>
+                    </tr>
+                </thead>
+                <tbody id="credit-body"></tbody>
+            </table>
         </div>
 
 
@@ -206,29 +230,63 @@
                 const nameVal = document.getElementById("name").value;
                 const cifVal = document.getElementById("cif").value;
 
-                const username = "";
-                const password = "";
-
-                const encoded = btoa(username + ":" + password);
-
-                const response = await fetch("", {
+                const response = await fetch("http://localhost:8000/cardlist/getList", {
                     method: "POST",
                     headers: {
-                        "Authorization": "Basic " + encoded,
+                        // "Authorization": "Basic " + encoded,
                         "Content-Type": "application/json"
                     },
                     body: JSON.stringify({
-                                            "CIF": cifVal,
-                                            "creditOrgNo": "066",
-                                            "debitOrgNo": "20010",
-                                            "tranReference": "202517370"
+                                            "CIF": cifVal
+                                            // "creditOrgNo": "066",
+                                            // "debitOrgNo": "20010",
+                                            // "tranReference": "202517370"
                                         })
                 });
 
+                try {
                 const data = await response.json();
                 console.log(data);
 
-                document.getElementById("result").innerText = JSON.stringify(data);
+                document.getElementById("debit-body").innerHTML = "";
+                document.getElementById("credit-body").innerHTML = "";
+
+                const debitBody = document.getElementById("debit-body");
+
+                data.debitCards.cardsList.forEach(function(card) {
+                    const debitrow = document.createElement("tr");
+                    const statusField = card.fields.find(function(f) {
+                        return f.fieldName === "card_status";
+                    });
+                    const cardStatus = statusField ? statusField.fieldValue : "Unknown";    
+                    debitrow.innerHTML = `
+                    <td>${card.pAN}</td>
+                    <td>${card.expiryDate}</td>
+                    <td>${card.embossName}</td>
+                    <td>${cardStatus}</td>
+                `;
+                debitBody.appendChild(debitrow);
+                });
+
+
+                const creditBody = document.getElementById("credit-body");
+
+                data.creditCards.cardsList.forEach(function(card) {
+                    const creditrow = document.createElement("tr");
+                    creditrow.innerHTML = `
+                    <td>${card.maskedCardNumber}</td>
+                    <td>${card.productDescription}</td>
+                    <td>${card.cardStatus}</td>
+                    <td>${card.creditCardCurrency}</td>
+                `;
+                creditBody.appendChild(creditrow);
+                });
+            } catch (error) {
+                console.error("Something went wrong: ", error);
+                document.getElementById("results").innerText = "Error fetching data."
+            }
+
+
             }
         )
 

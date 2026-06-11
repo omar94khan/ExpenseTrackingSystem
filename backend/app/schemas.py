@@ -11,9 +11,9 @@ class LoginRequest(BaseModel):
 
 class CardListRequest(BaseModel):
     CIF : str
-    creditOrgNo : str
-    debitOrgNo : str
-    tranReference : str
+    creditOrgNo : Optional[str] = "066"
+    debitOrgNo : Optional[str] = "20010"
+    tranReference : Optional[str] = "123516235"
 
 class UserCreate(BaseModel):
     username: str

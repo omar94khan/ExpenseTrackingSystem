@@ -15,5 +15,7 @@ router = APIRouter(prefix="/cardlist", tags=["cards"])
 async def getList(
     request : schemas.CardListRequest
     ):
+    print("Request received in practicecall.pyfor card list with CIF: ", request.CIF)
     response = await getlistofcards(request)
+    print("Response received in practicecall.py for card list: ", response)
     return response

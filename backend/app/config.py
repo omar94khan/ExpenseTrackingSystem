@@ -1,5 +1,8 @@
 import os
 from typing import List
+from dotenv import load_dotenv
+
+load_dotenv()
 
 def _split_csv(value: str | None) -> List[str]:
     if not value:
@@ -8,7 +11,7 @@ def _split_csv(value: str | None) -> List[str]:
 
 ENV = os.getenv("ENV", "local") # change to production in prod environment
 
-DATABASE_URL = os.getenv("DATABASE_URL", "sqlite:////database/transactions.db")
+DATABASE_URL = os.getenv("DATABASE_URL", "sqlite:///./database/transactions.db")
 
 SECRET_KEY = os.getenv("SECRET_KEY", "1d5as61f561g561gdfa4g51g5615f6sda23")  # must be overridden in prod
 ALGORITHM = os.getenv("ALGORITHM", "HS256")
