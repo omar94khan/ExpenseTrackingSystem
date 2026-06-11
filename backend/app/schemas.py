@@ -8,6 +8,13 @@ class LoginRequest(BaseModel):
     password: str
 
 # Request Schema
+
+class CardListRequest(BaseModel):
+    CIF : str
+    creditOrgNo : str
+    debitOrgNo : str
+    tranReference : str
+
 class UserCreate(BaseModel):
     username: str
     password: str  # plaintext for request; you will hash it before saving
@@ -80,3 +87,9 @@ class ReportOut(BaseModel):
     # class Config:
     #     orm_mode = True
 
+class CardListResponse(BaseModel):
+    model_config = ConfigDict(from_attributes=True)  # allows SQLAlchemy objects to be returned directly
+
+    debitCards : dict
+    creditCards : dict
+    

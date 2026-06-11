@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Omar's Expense Tracking Application</title>
+        <style>
+            body {
+                background-color: beige;
+                max-width: 75%;
+            }
+
+            h1 {
+                font-size: x-large;
+                color: red;
+            }
+
+            div {
+                padding-left: 5px;
+                padding-right: 5px;
+                padding-top: 10px;
+            }
+
+            .borderedtable {
+                border-collapse:collapse;
+                /* border: 1px solid black; */
+            }
+
+            td, th {
+                /* border: 1px dotted black; */
+                padding: 8px;
+            }
+
+            th {
+                border-bottom: 1px solid black;
+            }
+
+            .totaltotal {
+                border-top: 1px solid black;
+                border-bottom: 3px double black;
+            }
+
+            form{
+                border:1px solid black;
+                border-collapse:collapse;
+                height: auto;
+                line-break: auto;
+            }
+
+            input[type="text"],
+            input[type="number"],
+            input[type="date"],
+            input[type="password"] {
+                width: 500px;
+                padding: 2px;
+                border: 1px solid gray;
+                display: block;
+                margin-top: 2px;
+                margin-bottom: 5px;
+            }
+
+            input[type="submit"],
+            input[type="checkbox"] {
+                padding: 2px;
+                border: 1px solid gray;
+                margin-top: 10px;
+                margin-bottom: 5px;
+                display: block;
+            }
+
+            label {
+                font-weight: bold;
+            }
+
+            input:focus {
+                outline:1px;
+                border-color: red;
+            }
+        </style>
+    </head>
+
+    <body>
+        <div>
+            <h1>Expense Tracking Application. Header 1</h1>
+            <h2>Welcome to Omar's Expense Trakcing Application. This is the first time I am trying to build a HTML file from scratch. Header 2</h2>
+            <h3>Header 3</h3>
+            <h4>Header 4</h4>
+            <h5>Header 5</h5>
+            <h6>Header 6</h6>
+            <p>All the information above lives inside the first div of the body</p>
+        </div>
+
+        <div>
+            <h1>Header 1</h1>
+            <h2>Header 2</h2>
+            <h3>Header 3</h3>
+            <h4>Header 4</h4>
+            <h5>Header 5</h5>
+            <h6>Header 6</h6>
+            <p>This information lives inside the <em>second</em> div of the body. <strong>I wonder what's the difference</strong></p>
+            <p>Here's a link to <a href="https://www.google.com/">Google</a></p>
+            <p>Here's what I look like when trying to learn HTML and type all this out myself</p>
+            <iframe src ="https://giphy.com/embed/VbnUQpnihPSIgIXuZv" width="384" height="480" frameBorder="0" allowFullScreen alt="GIF of a cat working on a laptop"></iframe>
+        </div>
+
+        <div>
+            <p>Here's the thing though. In learning how to create this HTML, I had to go through the following:</p>
+            <ul>
+                <li>Learn programming on python</li>
+                <li>Develop a working backend for my application</li>
+                <li>Use claude to help teach me how to do everything</li>
+            </ul>
+            <p>In other words, I can now also build ordered lists!</p>
+            <ol>
+                <li>For</li>
+                <li>Example</li>
+                <li>This</li>
+                <li>List</li>
+            </ol>
+            <br>
+            <p>Now let's build a table.</p>
+            <table class="borderedtable">
+                <thead>
+                    <tr>
+                        <th>S No</th>
+                        <th>Name</th>
+                        <th>CPR Number</th>
+                        <th>Salary</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>1</td>
+                        <td>Omar</td>
+                        <td>941055493</td>
+                        <td>1,565</td>
+                    </tr>
+                    <tr>
+                        <td>2</td>
+                        <td>Mohsin</td>
+                        <td>970849646</td>
+                        <td>1,465</td>
+                    </tr>
+                    <tr class="totaltotal">
+                        <td>Total</td>
+                        <td></td>
+                        <td></td>
+                        <td>3,030</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div>
+            <p>Okay now that I've demonstrated my supreme HTML prowess, give me all your details, punk!</p>
+            <form id="myform">
+                <label for="name">Name</label>
+                <input type="text" id="name" placeholder="Give me your name!">
+                
+                <label for="cif">CIF</label>
+                <input type="number" id="cif" placeholder="What's your CIF!">
+
+
+                <label for="CPR">CPR</label>
+                <input type="number" id="CPR" placeholder="And your CPR too">
+
+
+                <label for="DOB">Date of Birth</label>
+                <input type="date" id="DOB" placeholder="When were you born?">
+
+
+                <label for="cuss">Write a swear word</label>
+                <input type="password" id="cuss" placeholder="screw you">
+
+                <label for="salary">What's your salary?</label>
+                <input type="number" id="salary" placeholder="650">
+
+
+                <label for="optin">Do you opt-in to awesomeness?</label>
+                <input type="checkbox" id="optin">
+
+
+                <label for="submission">Let's do this!</label>
+                <input type="submit" id="submission">
+            </form>
+        </div>
+
+
+        <div>
+            <p>Lastly, let's make a dropdown. Cool?</p>
+            <select>
+                <option value="yes">Yes</option>
+                <option value="no">No</option>
+            </select>
+        </div>
+
+        <div>
+            <p id="result">Response here</p>
+        </div>
+
+
+        <script>
+            const form = document.getElementById("myform");
+
+            form.addEventListener("submit", async function(event) {
+                event.preventDefault();
+
+                const nameVal = document.getElementById("name").value;
+                const cifVal = document.getElementById("cif").value;
+
+                const username = "ASBB_UAT_SVC_ACC_BASICAUTH";
+                const password = "af9affae-fdb0-4ae0-acd9-56c48b599c40";
+
+                const encoded = btoa(username + ":" + password);
+
+                const response = await fetch("https://uat3-asb-axyk27rquuiu-dx.integration.me-dubai-1.ocp.oraclecloud.com:443/ic/api/integration/v1/flows/rest/AFS_LISTALLCARDSBYCI/1.0/", {
+                    method: "POST",
+                    headers: {
+                        "Authorization": "Basic " + encoded,
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify({
+                                            "CIF": cifVal,
+                                            "creditOrgNo": "066",
+                                            "debitOrgNo": "20010",
+                                            "tranReference": "202517370"
+                                        })
+                });
+
+                const data = await response.json();
+                console.log(data);
+
+                document.getElementById("result").innerText = JSON.stringify(data);
+            }
+        )
+
+
+        </script>
+    </body>
+
+</html>

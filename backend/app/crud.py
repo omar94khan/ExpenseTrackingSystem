@@ -73,3 +73,4 @@ def fetch_report(
     ).all()
     print("Transactions fetched for Report :", transactions)
     return transactions
+

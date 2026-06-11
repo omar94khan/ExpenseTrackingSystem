@@ -15,3 +15,8 @@ ALGORITHM = os.getenv("ALGORITHM", "HS256")
 ACCESS_TOKEN_EXPIRE_MINUTES = int(os.getenv("ACCESS_TOKEN_EXPIRE_MINUTES", "60"))
 
 CORS_ORIGINS = _split_csv(os.getenv("CORS_ORIGINS", "*"))
+
+OIC_USERNAME = os.getenv("OIC_USERNAME","")
+OIC_PASSWORD = os.getenv("OIC_PASSWORD","")
+
+CARDLIST_API = os.getenv("CARDLIST_API","")
