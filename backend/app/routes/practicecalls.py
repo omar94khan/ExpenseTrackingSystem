@@ -2,7 +2,7 @@ import httpx
 from fastapi import APIRouter, Depends, HTTPException
 from .. import config
 from ..deps import get_current_user
-from OICAPIcalls import getlistofcards
+from ..services import getlistofcards
 
 
 from .. import crud, schemas, security
