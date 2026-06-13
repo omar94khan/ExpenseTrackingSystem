@@ -1,15 +1,34 @@
-function App() {
-  const fruits = ["Apple", "Banana", "Mango", "Orange", "Pear"];
+import { useState } from 'react';
+import CardSearch from './components/cardsearch';
+import AddTransaction from './components/addTransactions';
+import ListTransaction from './components/listTransactions';
 
-  return (
-    <div>
-      <h2>Fruit List</h2>
-      <ol>
-        {fruits.map(function(fruit) {
-          return <li>{fruit}</li>;
-        })}
-      </ol>
-      <p>Total fruits: {fruits.length}</p>
+
+function App() {
+  const [transactions, setTransactions] = useState([
+    // { id: 1, description: "Rent", amount: 500, type: "Expense" },
+    // { id: 2, description: "Salary", amount: 3000, type: "Income" },
+  ]);
+
+  const [description, setDescription] = useState("");
+  const [amount, setAmount] = useState("");
+  const [type, setType] = useState("Expense");
+    
+  
+
+  
+
+  return(<div>
+    <CardSearch />
+
+    <AddTransaction 
+      setTransactions={setTransactions} 
+      transactions={transactions} 
+      description={description} 
+      amount={amount} 
+      type={type} />
+      
+    <ListTransaction transactions={transactions} />
     </div>
   );
 }
