@@ -1,6 +1,6 @@
 import { useState } from 'react';
 
-function AddTransactions({onAdd}) {
+function AddTransactions({onAdd, transactions}) {
 
     const [description, setDescription] = useState("");
     const [amount, setAmount] = useState("");
@@ -12,7 +12,6 @@ function AddTransactions({onAdd}) {
             alert("Please fill in all fields");
             return;
         }
-    
 
         onAdd({
             id: Date.now(),
@@ -46,7 +45,7 @@ function AddTransactions({onAdd}) {
         <option value="Income">Income</option>
       </select>
 
-      <button onClick={handleSubmit, onAdd}>Add Transaction</button>
+      <button onClick={handleSubmit}>Add Transaction</button>
       </div>
     )
 };

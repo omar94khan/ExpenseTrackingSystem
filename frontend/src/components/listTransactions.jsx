@@ -8,20 +8,31 @@ function ListTransactions({transactions, setTransactions, onDelete}) {
     }
 
     return (<div>
-      <ul>
-        {transactions.map(function(transaction) {
-          return (
-            <li key={transaction.id}>
-              {transaction.id} - {transaction.description} — {transaction.amount} ({transaction.type})
-              <button onClick={() => onDelete(transaction.id)}>Delete</button>
-            </li>
-            
-          );
-          
-        })}
-            
-      </ul>
+        <table>
+            <thead>
+                <tr>
+                    <th>Timestamp</th>
+                    <th>Transaction Description</th>
+                    <th>Amount</th>
+                    <th>Transaction Type</th>
+                </tr>
+            </thead>
 
+            <tbody>                
+                {transactions.map(function(transaction) {
+                    const formattedDateTime = new Date(Number(transaction.id)).toLocaleString('en-US', {
+                                                        dateStyle: 'medium',
+                                                        timeStyle: 'short'
+                                                    });
+                    return (<tr key={transaction.id}>
+                        <td>{formattedDateTime}</td>
+                        <td>{transaction.description}</td>
+                        <td>{transaction.amount}</td>
+                        <td>{transaction.type}</td>
+                    </tr>)
+                })}
+            </tbody>
+        </table>
     </div>)
 };
 

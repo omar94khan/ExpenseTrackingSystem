@@ -17,7 +17,7 @@ function App() {
     return (
         <div>
             <CardSearch />
-            <AddTransactions onAdd={handleAdd} />
+            <AddTransactions onAdd={handleAdd} transactions={transactions} />
             <ListTransactions transactions={transactions} onDelete={handleDelete} />
         </div>
     );
