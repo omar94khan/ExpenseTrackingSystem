@@ -1,11 +1,6 @@
 import { useState } from 'react';
 
 function ListTransactions({transactions, setTransactions, onDelete}) {
-    
-    function deleteTransaction(id) {
-        setTransactions(transactions.filter(function(x) {return x.id !== id;})
-        );
-    }
 
     return (<div>
         <table>
@@ -15,6 +10,7 @@ function ListTransactions({transactions, setTransactions, onDelete}) {
                     <th>Transaction Description</th>
                     <th>Amount</th>
                     <th>Transaction Type</th>
+                    <th></th>
                 </tr>
             </thead>
 
@@ -29,6 +25,7 @@ function ListTransactions({transactions, setTransactions, onDelete}) {
                         <td>{transaction.description}</td>
                         <td>{transaction.amount}</td>
                         <td>{transaction.type}</td>
+                        <td><button onClick={(() => onDelete(transaction.id))}>Delete Transaction</button></td>
                     </tr>)
                 })}
             </tbody>
