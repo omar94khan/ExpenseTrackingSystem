@@ -1,6 +1,6 @@
 import { useState } from 'react';
 
-function ListTransactions({transactions}) {
+function ListTransactions({transactions, setTransactions, onDelete}) {
     
     function deleteTransaction(id) {
         setTransactions(transactions.filter(function(x) {return x.id !== id;})
@@ -13,7 +13,7 @@ function ListTransactions({transactions}) {
           return (
             <li key={transaction.id}>
               {transaction.id} - {transaction.description} — {transaction.amount} ({transaction.type})
-              <button onClick={() => deleteTransaction(transaction.id)}>Delete</button>
+              <button onClick={() => onDelete(transaction.id)}>Delete</button>
             </li>
             
           );

@@ -1,6 +1,10 @@
 import { useState } from 'react';
 
-function AddTransactions({setTransactions, transactions, description, amount, type}) {
+function AddTransactions({onAdd}) {
+
+    const [description, setDescription] = useState("");
+    const [amount, setAmount] = useState("");
+    const [type, setType] = useState("Expense");
 
     // A helper function to ensure the user doesn't submit null or empty strings for Description and Amount
     function handleSubmit() {
@@ -8,18 +12,18 @@ function AddTransactions({setTransactions, transactions, description, amount, ty
             alert("Please fill in all fields");
             return;
         }
+    
+
+        onAdd({
+            id: Date.now(),
+            description,
+            amount: Number(amount),
+            type,
+        });
+        setDescription("");
+        setAmount("");
+    
     }
-
-    const newTransaction = {
-      id: Date.now(),
-      description: description,
-      amount: Number(amount),
-      type: type,
-    };
-
-    setTransactions([...transactions, newTransaction]);
-    setDescription("");
-    setAmount("");
 
     return(<div><h1>Transactions</h1>
 
@@ -42,7 +46,7 @@ function AddTransactions({setTransactions, transactions, description, amount, ty
         <option value="Income">Income</option>
       </select>
 
-      <button onClick={handleSubmit}>Add Transaction</button>
+      <button onClick={handleSubmit, onAdd}>Add Transaction</button>
       </div>
     )
 };

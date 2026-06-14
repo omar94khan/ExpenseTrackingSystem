@@ -1,36 +1,26 @@
 import { useState } from 'react';
 import CardSearch from './components/cardsearch';
-import AddTransaction from './components/addTransactions';
-import ListTransaction from './components/listTransactions';
-
+import AddTransactions from './components/addTransactions';
+import ListTransactions from './components/listTransactions';
 
 function App() {
-  const [transactions, setTransactions] = useState([
-    // { id: 1, description: "Rent", amount: 500, type: "Expense" },
-    // { id: 2, description: "Salary", amount: 3000, type: "Income" },
-  ]);
+    const [transactions, setTransactions] = useState([]);
 
-  const [description, setDescription] = useState("");
-  const [amount, setAmount] = useState("");
-  const [type, setType] = useState("Expense");
-    
-  
+    function handleAdd(newTransaction) {
+        setTransactions(prev => [...prev, newTransaction]);
+    }
 
-  
+    function handleDelete(id) {
+        setTransactions(prev => prev.filter(t => t.id !== id));
+    }
 
-  return(<div>
-    <CardSearch />
-
-    <AddTransaction 
-      setTransactions={setTransactions} 
-      transactions={transactions} 
-      description={description} 
-      amount={amount} 
-      type={type} />
-      
-    <ListTransaction transactions={transactions} />
-    </div>
-  );
+    return (
+        <div>
+            <CardSearch />
+            <AddTransactions onAdd={handleAdd} />
+            <ListTransactions transactions={transactions} onDelete={handleDelete} />
+        </div>
+    );
 }
 
 export default App;
