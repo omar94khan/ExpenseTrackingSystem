@@ -1,6 +1,6 @@
 import { useState } from 'react';
 
-function AddTransactions({onAdd, transactions}) {
+function AddTransactions({onAdd}) {
 
     const [description, setDescription] = useState("");
     const [amount, setAmount] = useState("");

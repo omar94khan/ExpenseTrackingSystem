@@ -1,6 +1,4 @@
-import { useState } from 'react';
-
-function ListTransactions({transactions, setTransactions, onDelete}) {
+function ListTransactions({transactions, onDelete}) {
 
     return (<div>
         <table>
