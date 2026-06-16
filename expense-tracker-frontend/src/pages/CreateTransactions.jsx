@@ -4,18 +4,18 @@ import {useState} from 'react';
 function CreateTransactions({token, onAdd}) {
 
     const [loading, setLoading] = useState(false);
-    const [transactionTime, setTransactionTime] = useState();
-    const [transactionDescription, setTransactionDescription] = useState();
-    const [transactionCategory, setTransactionCategory] = useState();
-    const [transactionAmount, setTransactionAmount] = useState();
+    const [transactionTime, setTransactionTime] = useState("");
+    const [transactionDescription, setTransactionDescription] = useState("");
+    const [transactionCategory, setTransactionCategory] = useState("");
+    const [transactionAmount, setTransactionAmount] = useState(0);
     const [transactionType, setTransactionType] = useState("Income");
 
     async function createTransaction() {
         const endpoint = "http://localhost:8000/transactions/create";
         setLoading(true);
         
-        try {
-            const response = await fetch(endpoint,
+        try { 
+                const response = await fetch(endpoint,
                         {
                             method: "POST",
                             headers : {
@@ -56,7 +56,7 @@ function CreateTransactions({token, onAdd}) {
 
     function populateOptions() {
             if (transactionType === "Income") {
-                return (<select id="transaction-category" onChange={(e) => setTransactionCategory(e)}>
+                return (<select id="transaction-category" onChange={(e) => setTransactionCategory(e.target.value)}>
                             <option>Salary</option>
                             <option>Rental Income</option>
                             <option>Sales</option>
@@ -66,7 +66,7 @@ function CreateTransactions({token, onAdd}) {
                         </select>)
                     }
             else if (transactionType === "Expense") {
-                return (<select id="transaction-category" onChange={(e) => setTransactionCategory(e)}>
+                return (<select id="transaction-category" onChange={(e) => setTransactionCategory(e.target.value)}>
                             <option>Food</option>
                             <option>Rent</option>
                             <option>Education</option>
@@ -84,7 +84,7 @@ function CreateTransactions({token, onAdd}) {
                         </select>)
                     }
             else if (transactionType === "Transfer") {
-                return (<select id="transaction-category" onChange={(e) => setTransactionCategory(e)} disabled>
+                return (<select id="transaction-category" onChange={(e) => setTransactionCategory(e.target.value)} disabled>
                             <option>Transfer</option>
                         </select>)
                     }
@@ -98,21 +98,25 @@ function CreateTransactions({token, onAdd}) {
     return (<div>
         <table>
             <thead>
-                <th>Transaction Date</th>
-                <th>Description</th>
-                <th>Category</th>
-                <th>Amount</th>
-                <th>Transaction Type</th>
-                <th></th>
+                <tr>
+                    <th>Transaction Date</th>
+                    <th>Description</th>
+                    <th>Category</th>
+                    <th>Amount</th>
+                    <th>Transaction Type</th>
+                    <th></th>
+                </tr>
             </thead>
 
             <tbody>
-                <td><input type="datetime-local" id="transaction-time" onChange={(e) => setTransactionTime(e)} /></td>
-                <td><input type='text' id='transaction-description' onChange={(e) => setTransactionDescription(e)}/></td>
-                <td>{populateOptions()}</td>
-                <td><input type="number" id="transaction-amount" onChange={(e) => setTransactionAmount(e)} /></td>
-                <td><select onChange={(e) => setTransactionType(e.target.value)}><option>Income</option> <option>Expense</option> <option>Transfer</option> </select></td>
-                <td><button onClick={() => createTransaction()}>Post Transaction</button></td>
+                <tr>
+                    <td><input type="date" id="transaction-time" onChange={(e) => setTransactionTime(e.target.value)} /></td>
+                    <td><input type='text' id='transaction-description' onChange={(e) => setTransactionDescription(e.target.value)}/></td>
+                    <td>{populateOptions()}</td>
+                    <td><input type="number" id="transaction-amount" onChange={(e) => setTransactionAmount(e.target.value)} /></td>
+                    <td><select onChange={(e) => setTransactionType(e.target.value)}><option>Income</option> <option>Expense</option> <option>Transfer</option> </select></td>
+                    <td><button onClick={() => createTransaction()}>Post Transaction</button></td>
+                </tr>
             </tbody>
         </table>
     </div>);

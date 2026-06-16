@@ -4,6 +4,7 @@ import {useState} from 'react';
 function FetchTransactions({token, adhoctrigger, triggerSetter}) {
 
     const [loading, setLoading] = useState(false);
+    const [transactions, setTransactions] = useState([]);
 
     async function getTransactions() {
         const endpoint = "http://localhost:8000/transactions/fetch";
@@ -25,6 +26,8 @@ function FetchTransactions({token, adhoctrigger, triggerSetter}) {
                     }
 
                 const data = await response.json();
+                setTransactions(data)
+                return <p>{transactions}</p>
         }
         catch(err) {
                 throw alert("Error logging in: "+err);
@@ -36,7 +39,10 @@ function FetchTransactions({token, adhoctrigger, triggerSetter}) {
     };
 
     if (adhoctrigger) {return getTransactions()};
-    return <h3>{getTransactions}</h3>
+
+
+
+    return (<div><button onClick={() => getTransactions()}>Fetch Transactions</button><table><tr><td>{transactions.map((row) => <p>{row.amount}</p>)}</td></tr></table></div>)
 }
 
 export default FetchTransactions;
