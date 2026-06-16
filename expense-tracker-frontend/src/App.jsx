@@ -11,12 +11,16 @@ function App() {
 
   const [loginToken, setLoginToken] = useState();
 
+  function onLogin(token) {
+    setLoginToken(token);
+  };
+
     return (
       <div>
         <h1>My Expense Tracker</h1>
         <BrowserRouter>
             <Routes>
-                <Route path="/login" element={<Login loginToken = {loginToken} setLoginToken={setLoginToken}/>} />
+                <Route path="/login" element={<Login tokenSetter={onLogin}/>} />
                 <Route path="/dashboard" element={<Dashboard />} />
                 <Route path="/transactions" element={<Transactions />} />
                 <Route path="/reports" element={<Reports />} />

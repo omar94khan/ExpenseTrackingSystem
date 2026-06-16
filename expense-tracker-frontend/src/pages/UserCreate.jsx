@@ -6,7 +6,6 @@ function UserCreate() {
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
     const [loading, setLoading] = useState(false);
-    const [error, setError] = useState();
     const [pass2, setPass2] = useState("")
 
     async function createUser() {
@@ -43,8 +42,7 @@ function UserCreate() {
                 alert("User created successfully with userid "+data.id+". \nNavigating back to login page.")
                 return navigate("/login");
             } catch (err) {
-                 setError(err);  // ← store error in state
-                 throw alert("Error occured while creating user: "+error);
+                 throw alert("Error occured while creating user: "+err);
              } 
             finally {
                 setLoading(false);  // ← always runs, success or failure

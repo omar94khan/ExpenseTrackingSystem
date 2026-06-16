@@ -1,13 +1,12 @@
 import {useState} from 'react';
 import { useNavigate } from "react-router-dom";
 
-function Login({loginToken, setLoginToken}) {
+function Login({tokenSetter}) {
 
     
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
     const [loading, setLoading] = useState(false);
-    const [error, setError] = useState();
 
     async function userlogin() {
         const loginurl = "http://localhost:8000/auth/login-json"
@@ -36,15 +35,12 @@ function Login({loginToken, setLoginToken}) {
                         throw new Error(errorData.detail);
                     }
                 
-                console.log("Let's wait for the data")
                 const data = await verification.json();
-                console.log("Data received. ")
-
-                setLoginToken(data.access_token);
+                
+                tokenSetter(data.access_token);
                 return navigate("/dashboard");
             } catch (err) {
-                setError(err);  // ← store error in state
-                throw alert("Error logging in: "+error);
+                throw alert("Error logging in: "+err);
             } finally {
                 setLoading(false);  // ← always runs, success or failure
             }
