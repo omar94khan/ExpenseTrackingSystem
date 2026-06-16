@@ -1,4 +1,4 @@
-function Dashboard() {
+function Dashboard({token}) {
     return <h1>Dashboards Page</h1>
 }
 

@@ -9,14 +9,14 @@ function Login({tokenSetter}) {
     const [loading, setLoading] = useState(false);
 
     async function userlogin() {
-        const loginurl = "http://localhost:8000/auth/login-json"
+        const endpoint = "http://localhost:8000/auth/login-json"
 
         setLoading(true);
 
         
 
         try {
-                const verification = await fetch(loginurl,
+                const response = await fetch(endpoint,
                         {
                             method: "POST",
                             headers : {
@@ -30,15 +30,15 @@ function Login({tokenSetter}) {
                                 )
                         }
                     );
-                if (!verification.ok) {
-                        const errorData = await verification.json();
+                if (!response.ok) {
+                        const errorData = await response.json();
                         throw new Error(errorData.detail);
                     }
                 
-                const data = await verification.json();
+                const data = await response.json();
                 
                 tokenSetter(data.access_token);
-                return navigate("/dashboard");
+                return navigate("/transactions");
             } catch (err) {
                 throw alert("Error logging in: "+err);
             } finally {

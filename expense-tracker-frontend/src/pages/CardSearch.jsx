@@ -1,4 +1,4 @@
-function CardSearch() {
+function CardSearch({token}) {
     return <h1>Card Search Page</h1>
 }
 

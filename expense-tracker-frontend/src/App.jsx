@@ -9,7 +9,7 @@ import UserCreate from './pages/UserCreate';
 
 function App() {
 
-  const [loginToken, setLoginToken] = useState();
+  const [loginToken, setLoginToken] = useState("");
 
   function onLogin(token) {
     setLoginToken(token);
@@ -21,10 +21,10 @@ function App() {
         <BrowserRouter>
             <Routes>
                 <Route path="/login" element={<Login tokenSetter={onLogin}/>} />
-                <Route path="/dashboard" element={<Dashboard />} />
-                <Route path="/transactions" element={<Transactions />} />
-                <Route path="/reports" element={<Reports />} />
-                <Route path="/cards" element={<CardSearch />} />
+                <Route path="/dashboard" element={<Dashboard token={loginToken}/>} />
+                <Route path="/transactions" element={<Transactions token={loginToken}/>} />
+                <Route path="/reports" element={<Reports token={loginToken}/>} />
+                <Route path="/cards" element={<CardSearch token={loginToken}/>} />
                 <Route path="/usercreate" element={<UserCreate />} />
                 <Route path="/" element={<Navigate to="/login" />} />
             </Routes>
