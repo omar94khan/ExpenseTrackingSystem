@@ -5,4 +5,4 @@ pandas
 python-jose[cryptography]
 passlib[bcrypt]
 httpx
-dotenv
+python-dotenv
