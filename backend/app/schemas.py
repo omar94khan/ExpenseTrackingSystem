@@ -92,4 +92,29 @@ class CardListResponse(BaseModel):
 
     debitCards : dict
     creditCards : dict
+
+
+class BankCreate(BaseModel):
+    model_config = ConfigDict(from_attributes=True)  # allows SQLAlchemy objects to be returned directly
+
+    bank_name : str
+    bank_key : str
+    bank_bic : Optional[str]
+
+    @field_validator("bank_name")
+    @classmethod
+    def normalize_bank_name(cls, v):
+        return v.lower().capitalize()
+    
+    @field_validator("bank_key")
+    @classmethod
+    def normalize_bank_name(cls, v):
+        return v.upper()
+    
+    @field_validator("bank_bic")
+    @classmethod
+    def normalize_bank_name(cls, v):
+        return v.upper()
+    
+    
     

@@ -9,9 +9,8 @@ import httpx
 async def getlistofcards(
         req: CardListRequest
 ):
-    print("Request received in services.py for card list with CIF: ", req.CIF)
-    request = req.model_dump()
-    print("Request body: ", request)
+
+    request = req.model_dump()    
 
     async with httpx.AsyncClient(timeout=30.0) as client:
         response = await client.post(
@@ -19,7 +18,7 @@ async def getlistofcards(
             json=request,
             auth=(config.OIC_USERNAME,config.OIC_PASSWORD)
         )
-        print("Response received in services.py for card list: ", response.json())
+        
         return response.json()
 
     

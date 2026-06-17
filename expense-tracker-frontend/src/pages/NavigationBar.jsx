@@ -4,10 +4,11 @@ import { Outlet, Link, useNavigate } from "react-router-dom";
 
 
 function Layout({ onLogout }) {
+    const navigator = useNavigate()
 
     function handleLogout() {
         onLogout();
-        useNavigate("/");
+        navigator("/");
     }
 
     return (
@@ -21,8 +22,11 @@ function Layout({ onLogout }) {
                 </div>
                 <nav className="sidebar-nav">
                     <Link to="/transactions">Transactions</Link>
+                    <Link to="/dashboard">Dashboard</Link>
+                    <Link to="/reports">Reports</Link>
+                    <Link to="/cards">Cards</Link>
                     <Link to="/settings">Settings</Link>
-                    <button type="button" onClick={onLogout} itemID="logoutButton" >
+                    <button type="button" onClick={handleLogout} className="logoutButton" >
                         Logout
                     </button>
                 </nav>

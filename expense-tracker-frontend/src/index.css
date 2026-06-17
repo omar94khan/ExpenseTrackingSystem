@@ -111,6 +111,26 @@ h2 {
   border-left: 4px solid #6e8268; /* Left indicator border */
 }
 
+.sidebar-nav .logoutButton {
+    background: none;
+    border: none;
+    color: #b3b3d1;
+    font-weight: 500;
+    font-size: inherit;
+    padding: 15px 20px;
+    cursor: pointer;
+    text-align: left;
+    width: 100%;
+    text-decoration: none;
+    transition: all 0.3s ease;
+}
+
+.sidebar-nav .logoutButton:hover {
+    background-color: #d1d1d5;
+    color: #ffffff;
+    border-left: 4px solid #6e8268;
+}
+
 /* Main Content Area */
 .main-content {
   flex-grow: 1; /* Fills the rest of the screen space */
@@ -119,17 +139,7 @@ h2 {
   overflow-y: auto; /* Adds scrollbar if page content is too tall */
 }
 
-#logoutButton = {
-    background: "none",
-    border: "none",
-    color: "inherit",
-    font: "inherit",
-    cursor: "pointer",
-    textAlign: "left",
-    padding: "0",
-    display: "block",
-    width: "100%"
-};
+
 
 /* Responsive adjustment for small screens */
 @media (max-width: 360px) {

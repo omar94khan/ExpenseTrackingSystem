@@ -12,6 +12,7 @@ class Users(Base):
     created_on = Column(Date, nullable=True)
 
     transactions = relationship("Transactions", back_populates="transaction_user", cascade = "all, delete-orphan")
+    cifs = relationship("UserCIF", back_populates="user_cifs", cascade = "all, delete-orphan")
     
 
 class Transactions(Base):
@@ -27,5 +28,22 @@ class Transactions(Base):
 
     transaction_user = relationship("Users", back_populates="transactions")
 
-    
+class UserCIF(Base):
+    __tablename__ = "UserCIF"
+
+    id = Column(Integer, primary_key=True)
+    user_id = Column(Integer, ForeignKey("users.id"), nullable=False)
+    bank_id = Column(Integer, ForeignKey("config.banks.id"), nullable=False)
+    cif_id = Column(String, nullable=False)
+
+    user_cifs = relationship("Users", back_populates="cifs")
+
+class Banks(Base):
+    __tablename__ = "config.banks"
+
+    id = Column(Integer, primary_key=True)
+    bank_name = Column(String, nullable=False)
+    bank_key = Column(String, nullable=False)
+    bank_bic = Column(String, nullable = True)
+
  

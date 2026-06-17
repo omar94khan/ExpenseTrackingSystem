@@ -1,5 +1,6 @@
 import httpx
 from fastapi import APIRouter, Depends, HTTPException
+from sqlalchemy.orm import Session
 from .. import config
 from ..deps import get_current_user
 from ..services import getlistofcards
@@ -13,9 +14,13 @@ router = APIRouter(prefix="/cardlist", tags=["cards"])
 
 @router.post("/getList", response_model=schemas.CardListResponse)
 async def getList(
-    request : schemas.CardListRequest
+    request : schemas.CardListRequest,
+    db: Session = Depends(get_db),
+    current_user = Depends(get_current_user)
     ):
-    print("Request received in practicecall.pyfor card list with CIF: ", request.CIF)
+
+    
+    
     response = await getlistofcards(request)
-    print("Response received in practicecall.py for card list: ", response)
+    
     return response

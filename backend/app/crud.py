@@ -1,6 +1,6 @@
 from sqlalchemy.orm import Session
-from .models import Users, Transactions
-from .schemas import UserCreate, TransactionCreate
+from .models import Users, Transactions, UserCIF, Banks
+from .schemas import UserCreate, TransactionCreate, BankCreate
 from datetime import date
 import datetime as dt
 
@@ -74,3 +74,111 @@ def fetch_report(
     print("Transactions fetched for Report :", transactions)
     return transactions
 
+
+################################################################################################################################
+
+def add_cif(
+        db: Session,
+        user_id: int,
+        bank_id: int,
+        cif: str
+):
+    user = db.query(Users).filter(Users.id == user_id).first()
+    bank = db.query(Banks).filter(Banks.id == bank_id).first()
+    if not user or not bank:
+        return None
+    
+    unique_cif = db.query(UserCIF).filter(UserCIF.bank_id == bank_id).filter(UserCIF.cif_id == cif).first()
+    if unique_cif:
+        return None
+
+    db_transaction = UserCIF(user_id = user_id, bank_id = bank_id, cif=cif)
+    db.add(db_transaction)
+    db.commit()
+    db.refresh(db_transaction)
+
+    return db_transaction
+
+def delete_cif(
+        db: Session,
+        user_id: int,
+        bank_id: int,
+        cif: str
+):
+    user = db.query(Users).filter(Users.id == user_id).first()
+    bank = db.query(Banks).filter(Banks.id == bank_id).first()
+    if not user or not bank:
+        return None
+    
+    unique_cif = db.query(UserCIF).filter(UserCIF.bank_id == bank_id).filter(UserCIF.cif_id == cif).first()
+    if not unique_cif:
+        return None
+
+    db.delete(unique_cif)
+    db.commit()
+
+    return unique_cif
+
+def fetch_cifs(
+        db: Session,
+        user_id: int
+):
+    authorized_user = db.query(Users).filter(Users.id == user_id).first()
+    if not authorized_user:
+        return None
+    
+    return db.query(UserCIF).filter(UserCIF.user_id == user_id).all()
+    
+
+def add_bank(
+        db: Session,
+        user_id:int,
+        bank_details : BankCreate
+):
+    
+    bank_info = bank_details.model_dump()
+    bank_exists = db.query(Banks).filter(Banks.bank_name == bank_info["bank_name"]).first()
+    if bank_exists:
+        return None
+    
+    authorized_user = db.query(Users).filter(Users.id == user_id).first()
+    if not authorized_user:
+        return None
+    
+    transaction = Banks(bank_info)
+    db.add(transaction)
+    db.commit()
+    db.refresh(transaction)
+
+    return transaction
+
+def delete_bank(
+        db: Session,
+        user_id:int,
+        bank_details : BankCreate
+):
+    
+    bank_info = bank_details.model_dump()
+    bank_exists = db.query(Banks).filter(Banks.bank_name == bank_info["bank_name"]).first()
+    if not bank_exists:
+        return None
+    
+    authorized_user = db.query(Users).filter(Users.id == user_id).first()
+    if not authorized_user:
+        return None
+    
+    
+    db.delete(bank_exists)
+    db.commit()
+
+    return bank_exists
+
+def fetch_banks(
+        db:Session,
+        user_id:int
+):
+    authorized_user = db.query(Users).filter(Users.id == user_id).first()
+    if not authorized_user:
+        return None
+    
+    return db.query(Banks).all()

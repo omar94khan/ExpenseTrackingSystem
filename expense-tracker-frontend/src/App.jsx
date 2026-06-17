@@ -1,4 +1,4 @@
-import { BrowserRouter, Routes, Route, Navigate, redirect, useNavigate } from 'react-router-dom';
+import { BrowserRouter, Routes, Route, Navigate, redirect } from 'react-router-dom';
 import { useState, useEffect } from 'react';
 import Login from './pages/Login';
 import Dashboard from './pages/Dashboard';
@@ -26,7 +26,6 @@ function App() {
       localStorage.removeItem("token");
       setLoginToken("");
       console.log("reached the end")
-      BrowserRouter("/");
     }
   
   };
