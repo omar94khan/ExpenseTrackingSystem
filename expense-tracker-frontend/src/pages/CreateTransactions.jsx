@@ -100,10 +100,10 @@ function CreateTransactions({token, refreshCount, setRefreshCount}) {
             <thead>
                 <tr>
                     <th>Transaction Date</th>
-                    <th>Description</th>
+                    <th>Transaction Type</th>
                     <th>Category</th>
                     <th>Amount</th>
-                    <th>Transaction Type</th>
+                    <th>Description</th>
                     <th></th>
                 </tr>
             </thead>
@@ -111,10 +111,10 @@ function CreateTransactions({token, refreshCount, setRefreshCount}) {
             <tbody>
                 <tr>
                     <td><input type="date" id="transaction-time" onChange={(e) => setTransactionTime(e.target.value)} /></td>
-                    <td><input type='text' id='transaction-description' onChange={(e) => setTransactionDescription(e.target.value)}/></td>
+                    <td><select onChange={(e) => setTransactionType(e.target.value)}><option>Income</option> <option>Expense</option> <option>Transfer</option> </select></td>
                     <td>{populateOptions()}</td>
                     <td><input type="number" id="transaction-amount" onChange={(e) => setTransactionAmount(e.target.value)} /></td>
-                    <td><select onChange={(e) => setTransactionType(e.target.value)}><option>Income</option> <option>Expense</option> <option>Transfer</option> </select></td>
+                    <td><input type='text' id='transaction-description' onChange={(e) => setTransactionDescription(e.target.value)}/></td>
                     <td><button onClick={() => createTransaction()}>Post Transaction</button></td>
                 </tr>
             </tbody>

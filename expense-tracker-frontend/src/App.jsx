@@ -1,32 +1,52 @@
-import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
-import { useState } from 'react';
+import { BrowserRouter, Routes, Route, Navigate, redirect, useNavigate } from 'react-router-dom';
+import { useState, useEffect } from 'react';
 import Login from './pages/Login';
 import Dashboard from './pages/Dashboard';
 import Transactions from './pages/Transactions';
 import Reports from './pages/Reports';
 import CardSearch from './pages/CardSearch';
 import UserCreate from './pages/UserCreate';
+import Layout from './pages/NavigationBar';
+import Settings from './pages/Settings';
 
 function App() {
 
-  const [loginToken, setLoginToken] = useState("");
+  const [loginToken, setLoginToken] = useState(localStorage.getItem("token") || "");
+
 
   function onLogin(token) {
+    localStorage.setItem("token", token);
     setLoginToken(token);
+  };
+
+  function onLogout() {
+    const confirmed = window.confirm("Are you sure you want to logout?");
+
+    if (confirmed) {
+      localStorage.removeItem("token");
+      setLoginToken("");
+      console.log("reached the end")
+      BrowserRouter("/");
+    }
+  
   };
 
     return (
       <div>
-        <h1>My Expense Tracker</h1>
         <BrowserRouter>
             <Routes>
                 <Route path="/login" element={<Login tokenSetter={onLogin}/>} />
-                <Route path="/dashboard" element={<Dashboard token={loginToken}/>} />
-                <Route path="/transactions" element={<Transactions token={loginToken}/>} />
-                <Route path="/reports" element={<Reports token={loginToken}/>} />
-                <Route path="/cards" element={<CardSearch token={loginToken}/>} />
                 <Route path="/usercreate" element={<UserCreate />} />
+                <Route element={<Layout onLogout={onLogout} />}>
+                    <Route path="/transactions" element={<Transactions token={loginToken} />} />
+                    <Route path="/dashboard" element={<Dashboard token={loginToken}/>} />
+                    <Route path="/transactions" element={<Transactions token={loginToken}/>} />
+                    <Route path="/reports" element={<Reports token={loginToken}/>} />
+                    <Route path="/cards" element={<CardSearch token={loginToken}/>} />
+                    <Route path="/settings" element={<Settings token={loginToken}/>} />
+                </Route>
                 <Route path="/" element={<Navigate to="/login" />} />
+                <Route path="/logout" element={<Navigate to="/login" />} />
             </Routes>
         </BrowserRouter>
       </div>

@@ -59,3 +59,90 @@ h1 {
 h2 {
   margin-bottom: 20px;
 }
+
+/* Layout.css */
+* {
+  margin: 0;
+  /* box-sizing: border-box; */
+  box-sizing: content-box;
+}
+
+/* Flexbox container for sidebar and main content */
+.layout-container {
+  display: flex;
+  height: 100vh; /* Takes full viewport height */
+  width: 80vw;
+}
+
+/* Sidebar styling (Left Navigation) */
+.sidebar {
+  width: 150px;
+  background-color: #6e8268;
+  color: #ffffff;
+  display: flex;
+  flex-direction: column;
+  flex-shrink: 0; /* Prevents sidebar from shrinking on smaller screens */
+  box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
+}
+
+.sidebar-header {
+  padding: 20px;
+  background-color: #6e8268;
+  border-bottom: 1px solid #6e8268;
+}
+
+.sidebar-nav {
+  display: flex;
+  flex-direction: column;
+  padding: 0cqmax;
+}
+
+.sidebar-nav a {
+  padding: 15px 20px;
+  color: #b3b3d1;
+  text-decoration: none;
+  font-weight: 500;
+  transition: all 0.3s ease;
+}
+
+.sidebar-nav a:hover {
+  background-color: #d1d1d5;
+  color: #ffffff;
+  border-left: 4px solid #6e8268; /* Left indicator border */
+}
+
+/* Main Content Area */
+.main-content {
+  flex-grow: 1; /* Fills the rest of the screen space */
+  background-color: #f4f7f6;
+  padding: 30px;
+  overflow-y: auto; /* Adds scrollbar if page content is too tall */
+}
+
+#logoutButton = {
+    background: "none",
+    border: "none",
+    color: "inherit",
+    font: "inherit",
+    cursor: "pointer",
+    textAlign: "left",
+    padding: "0",
+    display: "block",
+    width: "100%"
+};
+
+/* Responsive adjustment for small screens */
+@media (max-width: 360px) {
+  .layout-container {
+    flex-direction: column;
+  }
+
+  .sidebar {
+    width: 50%;
+    height: auto;
+  }
+  
+  .sidebar-nav a {
+    text-align: center;
+  }
+}

@@ -5,7 +5,7 @@ import FetchTransactions from './FetchTransactions';
 
 
 function Transactions({token}) {
-    console.log("Token received from App.jsx = "+token)
+    
     const [refreshCount, setRefreshCount] = useState(0)
 
     return (<div>
