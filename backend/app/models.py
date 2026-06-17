@@ -33,17 +33,19 @@ class UserCIF(Base):
 
     id = Column(Integer, primary_key=True)
     user_id = Column(Integer, ForeignKey("users.id"), nullable=False)
-    bank_id = Column(Integer, ForeignKey("config.banks.id"), nullable=False)
+    bank_id = Column(Integer, ForeignKey("config_banks.id"), nullable=False)
     cif_id = Column(String, nullable=False)
 
     user_cifs = relationship("Users", back_populates="cifs")
+    bank_cifs = relationship("Banks", back_populates="all_cifs")
 
 class Banks(Base):
-    __tablename__ = "config.banks"
+    __tablename__ = "config_banks"
 
     id = Column(Integer, primary_key=True)
     bank_name = Column(String, nullable=False)
     bank_key = Column(String, nullable=False)
     bank_bic = Column(String, nullable = True)
 
+    all_cifs = relationship("UserCIF", back_populates="bank_cifs", cascade = "all, delete-orphan")
  

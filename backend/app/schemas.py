@@ -108,12 +108,12 @@ class BankCreate(BaseModel):
     
     @field_validator("bank_key")
     @classmethod
-    def normalize_bank_name(cls, v):
+    def normalize_bank_key(cls, v):
         return v.upper()
     
     @field_validator("bank_bic")
     @classmethod
-    def normalize_bank_name(cls, v):
+    def normalize_bank_bic(cls, v):
         return v.upper()
     
     

@@ -92,12 +92,16 @@ def add_cif(
     if unique_cif:
         return None
 
-    db_transaction = UserCIF(user_id = user_id, bank_id = bank_id, cif=cif)
-    db.add(db_transaction)
+    cif_addition = UserCIF(user_id = user_id, bank_id = bank_id, cif_id=cif)
+    db.add(cif_addition)
     db.commit()
-    db.refresh(db_transaction)
+    db.refresh(cif_addition)
 
-    return db_transaction
+    return cif_addition
+
+
+
+
 
 def delete_cif(
         db: Session,
@@ -119,6 +123,10 @@ def delete_cif(
 
     return unique_cif
 
+
+
+
+
 def fetch_cifs(
         db: Session,
         user_id: int
@@ -129,6 +137,7 @@ def fetch_cifs(
     
     return db.query(UserCIF).filter(UserCIF.user_id == user_id).all()
     
+##############################################################################################################################
 
 def add_bank(
         db: Session,
@@ -145,12 +154,15 @@ def add_bank(
     if not authorized_user:
         return None
     
-    transaction = Banks(bank_info)
-    db.add(transaction)
+    bank_addition = Banks(**bank_info)
+    db.add(bank_addition)
     db.commit()
-    db.refresh(transaction)
+    db.refresh(bank_addition)
 
-    return transaction
+    return bank_addition
+
+
+
 
 def delete_bank(
         db: Session,
@@ -172,6 +184,10 @@ def delete_bank(
     db.commit()
 
     return bank_exists
+
+
+
+
 
 def fetch_banks(
         db:Session,
