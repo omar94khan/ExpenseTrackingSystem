@@ -1,7 +1,7 @@
 import {useState} from 'react';
 
 
-function CreateTransactions({token, onAdd}) {
+function CreateTransactions({token, refreshCount, setRefreshCount}) {
 
     const [loading, setLoading] = useState(false);
     const [transactionTime, setTransactionTime] = useState("");
@@ -37,7 +37,7 @@ function CreateTransactions({token, onAdd}) {
                     }
 
                 const data = await response.json();
-                onAdd;
+                setRefreshCount((e) => e + 1);
 
         }
         catch(err) {

@@ -6,22 +6,17 @@ import FetchTransactions from './FetchTransactions';
 
 function Transactions({token}) {
     console.log("Token received from App.jsx = "+token)
-    const [triggerAPI, setTriggerAPI] = useState(false)
-    
-    async function fetchTransactions(){
-        
-        return ""
-    };
+    const [refreshCount, setRefreshCount] = useState(0)
 
     return (<div>
         <h2>New Entry</h2>
-        <CreateTransactions token={token} onAdd={fetchTransactions} />
+        <CreateTransactions token={token} refreshCount={refreshCount} setRefreshCount={setRefreshCount} />
 
         <br />
         <br />
 
         <h2>Transactions</h2>
-        <FetchTransactions token = {token} adhoctrigger={triggerAPI} triggerSetter = {setTriggerAPI}/>
+        <FetchTransactions token = {token} refreshCount = {refreshCount} setRefreshCount = {setRefreshCount}/>
     </div>)
 
 
