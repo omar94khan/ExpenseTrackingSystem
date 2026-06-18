@@ -1,6 +1,6 @@
 from sqlalchemy.orm import Session
 from .models import Users, Transactions, UserCIF, Banks
-from .schemas import UserCreate, TransactionCreate, BankCreate
+from .schemas import UserCreate, TransactionCreate, BankCreate, BankDeleteRequest
 from datetime import date
 import datetime as dt
 
@@ -99,10 +99,6 @@ def add_cif(
 
     return cif_addition
 
-
-
-
-
 def delete_cif(
         db: Session,
         user_id: int,
@@ -122,10 +118,6 @@ def delete_cif(
     db.commit()
 
     return unique_cif
-
-
-
-
 
 def fetch_cifs(
         db: Session,
@@ -161,17 +153,14 @@ def add_bank(
 
     return bank_addition
 
-
-
-
 def delete_bank(
         db: Session,
         user_id:int,
-        bank_details : BankCreate
+        bank_key : BankDeleteRequest
 ):
     
-    bank_info = bank_details.model_dump()
-    bank_exists = db.query(Banks).filter(Banks.bank_name == bank_info["bank_name"]).first()
+    
+    bank_exists = db.query(Banks).filter(Banks.bank_key == bank_key.bank_key).first()
     if not bank_exists:
         return None
     
@@ -184,10 +173,6 @@ def delete_bank(
     db.commit()
 
     return bank_exists
-
-
-
-
 
 def fetch_banks(
         db:Session,

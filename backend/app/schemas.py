@@ -95,7 +95,7 @@ class CardListResponse(BaseModel):
 
 
 class BankCreate(BaseModel):
-    model_config = ConfigDict(from_attributes=True)  # allows SQLAlchemy objects to be returned directly
+    # model_config = ConfigDict(from_attributes=True)  # allows SQLAlchemy objects to be returned directly
 
     bank_name : str
     bank_key : str
@@ -114,7 +114,17 @@ class BankCreate(BaseModel):
     @field_validator("bank_bic")
     @classmethod
     def normalize_bank_bic(cls, v):
-        return v.upper()
+        if v is not None and v != "":
+            return v.upper()
     
     
+class BankCreateResponse(BaseModel):
+    model_config = ConfigDict(from_attributes=True)  # allows SQLAlchemy objects to be returned directly
+
+    id:int
+    bank_key: str
+    bank_name: str
+    bank_bic: Optional[str]
     
+class BankDeleteRequest(BaseModel):
+    bank_key: str
