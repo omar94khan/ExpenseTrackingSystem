@@ -26,7 +26,7 @@ function FetchBanks({token, refreshCount, setRefreshCount}) {
                     }
 
                 const data = await response.json();
-                setTransactions(data);
+                setBanks(data);
         }
         catch(err) {
                 throw alert("Error fetching banks: "+err);
@@ -38,7 +38,7 @@ function FetchBanks({token, refreshCount, setRefreshCount}) {
 
     
     async function deleteBank(bank_key) {
-        const endpoint = "http://localhost:8000/transactions/delete/"+transaction_id;
+        const endpoint = "http://localhost:8000/banks/delete";
         setLoading(true);
         
         try {
@@ -87,8 +87,8 @@ function FetchBanks({token, refreshCount, setRefreshCount}) {
 
 
 
-    return (<div>
-               
+    return (<div className='bank-management-div'>
+               <h3>List of Banks</h3>
                 <table>
                     <thead>
                         <tr>

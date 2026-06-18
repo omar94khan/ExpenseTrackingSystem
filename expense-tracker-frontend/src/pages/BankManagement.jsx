@@ -1,6 +1,6 @@
 import {useState} from 'react';
 import { useNavigate } from "react-router-dom";
-import CreateBanks from './CreateBanks';
+import CreateBanks from './CreateBank';
 import FetchBanks from './FetchBanks';
 
 function BankManagement({token}) {

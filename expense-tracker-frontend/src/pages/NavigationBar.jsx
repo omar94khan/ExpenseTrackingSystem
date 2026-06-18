@@ -26,6 +26,7 @@ function Layout({ onLogout }) {
                     <Link to="/reports">Reports</Link>
                     <Link to="/cards">Cards</Link>
                     <Link to="/settings">Settings</Link>
+                    <Link to="/admintools">Admin Tools</Link>
                     <button type="button" onClick={handleLogout} className="logoutButton" >
                         Logout
                     </button>

@@ -8,6 +8,7 @@ import CardSearch from './pages/CardSearch';
 import UserCreate from './pages/UserCreate';
 import Layout from './pages/NavigationBar';
 import Settings from './pages/Settings';
+import AdminTools from './pages/AdminTools';
 
 function App() {
 
@@ -43,6 +44,7 @@ function App() {
                     <Route path="/reports" element={<Reports token={loginToken}/>} />
                     <Route path="/cards" element={<CardSearch token={loginToken}/>} />
                     <Route path="/settings" element={<Settings token={loginToken}/>} />
+                    <Route path="/admintools" element={<AdminTools token={loginToken}/>} />
                 </Route>
                 <Route path="/" element={<Navigate to="/login" />} />
                 <Route path="/logout" element={<Navigate to="/login" />} />

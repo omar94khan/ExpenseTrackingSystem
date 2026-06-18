@@ -59,7 +59,7 @@ function CreateBanks({token, refreshCount, setRefreshCount}) {
     };
 
     
-    return (<div>
+    return (<div className='bank-management-div'>
         <h3>Add New Bank</h3>
         <table>
             <thead>
