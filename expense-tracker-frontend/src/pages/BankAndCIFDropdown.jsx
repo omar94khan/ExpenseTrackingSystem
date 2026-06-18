@@ -1,7 +1,7 @@
 import {useState, useEffect} from 'react';
 
 
-function BankAndCIFDropdown({token, selectedBank, setSelectedBank, selectedCIF, setSelectedCIF, setRefreshCount}) {
+function BankAndCIFDropdown({token, selectedBank, setSelectedBank, selectedCIF, setSelectedCIF, setCards, cards}) {
 
     const [loading, setLoading] = useState(false);
     const [banks, setBanks] = useState([]);
@@ -43,8 +43,13 @@ function BankAndCIFDropdown({token, selectedBank, setSelectedBank, selectedCIF, 
     
 
     useEffect(() => {
-        if (selectedBank !== "") {setEnableCIF(true); console.log(enableCIF)}
-        if (selectedBank === "" || selectedBank === undefined) {setEnableCIF(false); console.log(enableCIF)}
+        if (selectedBank !== "") {setEnableCIF(true)}
+        if (selectedBank === "" || selectedBank === undefined) {setEnableCIF(false)}
+
+        getCIFs()
+        // console.log("Bank Selected = "+selectedBank)
+        const filteredBanks = (banks.find((bank) => bank.bank_key === selectedBank))
+        if (filteredBanks !== [] && filteredBanks !== undefined) {setBankID(banks.find((bank) => bank.bank_key === selectedBank)["id"])}
     },[selectedBank])
 
     useEffect(() => {
@@ -99,21 +104,50 @@ function BankAndCIFDropdown({token, selectedBank, setSelectedBank, selectedCIF, 
 
     };
 
-    useEffect(() => {
-        getCIFs()
-        const filteredBanks = (banks.find((bank) => bank.bank_key === selectedBank))
-        if (filteredBanks !== [] && filteredBanks !== undefined) {setBankID(banks.find((bank) => bank.bank_key === selectedBank)["id"])}
-    },[selectedBank]);
-
     function populateCIFsDropdown() {
         const filteredCIFs = CIFs.filter((item) => item.bank_id === bankID)
 
         return (
-            <select disabled={!enableCIF} onChange={(e) => {setSelectedCIF(e.target.value)}}>
+            <select disabled={!enableCIF} onChange={(e) => setSelectedCIF(e.target.value)}>
                 <option></option>
                 {filteredCIFs.map((row) => <option key={row.id}>{row.cif_id}</option>)} 
             </select>
         )
+    }
+
+    async function getlistofcards() {
+        setLoading(true)
+
+        try {
+            const response = await fetch(
+                                            "http://localhost:8000/cardlist/getList?bank_key="+selectedBank,
+                                                {
+                                                    method: "GET",
+                                                    headers : {
+                                                            "Authorization": "Bearer " + token,
+                                                            "Content-Type": "application/json"
+                                                        }
+                                                }
+                                        )
+
+            if (!response.ok) {
+                                const errorData = await response.json();
+                                throw new Error(errorData.detail);
+                            }
+                
+                const data = await response.json();
+                setCards(data);
+
+            }
+
+        catch (err) {
+            throw alert("Error fetching Cards: "+err);
+        }
+
+        finally {
+            setLoading(false)
+        }
+
     }
     
 
@@ -131,7 +165,7 @@ function BankAndCIFDropdown({token, selectedBank, setSelectedBank, selectedCIF, 
                         <tr>
                             <td>{!banksLoaded ? populateBankDropdown() : ""}</td>
                             <td>{populateCIFsDropdown()}</td>
-                            <td><button onClick={setRefreshCount((e) => e + 1)}>Fetch Cards</button></td>
+                            <td><button onClick={() => getlistofcards()}>Fetch Cards</button></td>
                         </tr>
                     </tbody>
                 </table>

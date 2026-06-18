@@ -1,6 +1,6 @@
 import { useState } from 'react';
 
-function CardSearch() {
+function CardSummary() {
     const [cif, setCif] = useState();
     const[cardResponse, setCardResponse] = useState()
     const[loading, setLoading] = useState(false)
@@ -139,4 +139,4 @@ function CardSearch() {
     
 };
 
-export default CardSearch;
+export default CardSummary;

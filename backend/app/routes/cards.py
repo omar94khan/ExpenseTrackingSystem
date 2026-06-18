@@ -12,7 +12,7 @@ from ..deps import get_db
 router = APIRouter(prefix="/cardlist", tags=["cards"])
 
 
-@router.post("/getList", response_model=schemas.CardListResponse)
+@router.get("/getList", response_model=schemas.CardListResponse)
 async def getList(
     bank_key : str,
     db: Session = Depends(get_db),

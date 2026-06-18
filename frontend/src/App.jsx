@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import CardSearch from './components/cardsearch';
+import CardSummary from './components/cardsearch';
 import AddTransactions from './components/addTransactions';
 import ListTransactions from './components/listTransactions';
 
@@ -16,7 +16,7 @@ function App() {
 
     return (
         <div>
-            <CardSearch />
+            <CardSummary />
             <AddTransactions onAdd={handleAdd} />
             <ListTransactions transactions={transactions} onDelete={handleDelete} />
         </div>
