@@ -1,7 +1,7 @@
 import {useState} from 'react';
 import { useNavigate } from "react-router-dom";
 import CreateBanks from './CreateBank';
-import FetchBanks from './FetchBanks';
+import FetchBanks from './FetchBanksTable';
 
 function BankManagement({token}) {
     const [refreshCount, setRefreshCount] = useState(0);

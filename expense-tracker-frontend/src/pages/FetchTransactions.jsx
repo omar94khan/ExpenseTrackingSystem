@@ -29,7 +29,7 @@ function FetchTransactions({token, refreshCount, setRefreshCount}) {
                 setTransactions(data);
         }
         catch(err) {
-                throw alert("Error logging in: "+err);
+                throw alert("Error fetching transactions: "+err);
             }
         finally {
             setLoading(false)
@@ -61,7 +61,7 @@ function FetchTransactions({token, refreshCount, setRefreshCount}) {
                 
         }
         catch(err) {
-                throw alert("Error logging in: "+err);
+                throw alert("Error deleting transaction: "+err);
             }
         finally {
             setLoading(false)

@@ -58,7 +58,7 @@ function CreateTransactions({token, refreshCount, setRefreshCount}) {
 
         }
         catch(err) {
-                throw alert("Error logging in: "+err);
+                throw alert("Error adding transactions: "+err);
             }
         finally {
             setLoading(false)
