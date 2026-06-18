@@ -1,12 +1,10 @@
-import httpx
-from fastapi import APIRouter, Depends, HTTPException
+from fastapi import APIRouter, Depends
 from sqlalchemy.orm import Session
-from .. import config
 from ..deps import get_current_user
 from ..crud import add_bank, fetch_banks, delete_bank
 
 
-from .. import crud, schemas, security
+from .. import schemas
 from ..deps import get_db
 
 router = APIRouter(prefix="/banks", tags=["banks"])

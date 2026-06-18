@@ -128,3 +128,32 @@ class BankCreateResponse(BaseModel):
     
 class BankDeleteRequest(BaseModel):
     bank_key: str
+
+
+class CIFCreate(BaseModel):
+    bank_key : str
+    cif : str
+    
+    @field_validator("bank_key")
+    @classmethod
+    def normalize_bank_key(cls, v):
+        return v.upper()
+    
+class CIFCreateResponse(BaseModel):
+    model_config = ConfigDict(from_attributes=True)
+    
+    id: int
+    cif_id: str
+    user_id: int
+    bank_id: int
+
+
+
+class DeleteCIF(BaseModel):
+    bank_key : str
+    cif : str
+    
+    @field_validator("bank_key")
+    @classmethod
+    def normalize_bank_key(cls, v):
+        return v.upper()
