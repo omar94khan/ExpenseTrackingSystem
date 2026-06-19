@@ -1,9 +1,8 @@
 import {useState, useEffect} from 'react';
 
 
-function BankAndCIFDropdown({token, selectedBank, setSelectedBank, selectedCIF, setSelectedCIF, setCards, cards}) {
+function BankAndCIFDropdown({token, selectedBank, setSelectedBank, selectedCIF, setSelectedCIF, setCards, cards, loading, setLoading}) {
 
-    const [loading, setLoading] = useState(false);
     const [banks, setBanks] = useState([]);
     const [CIFs, setCIFs] = useState([]);
     const [enableCIF, setEnableCIF] = useState(false);
@@ -45,6 +44,7 @@ function BankAndCIFDropdown({token, selectedBank, setSelectedBank, selectedCIF, 
     useEffect(() => {
         if (selectedBank !== "") {setEnableCIF(true)}
         if (selectedBank === "" || selectedBank === undefined) {setEnableCIF(false)}
+        setSelectedCIF("")
 
         getCIFs()
         // console.log("Bank Selected = "+selectedBank)
@@ -118,9 +118,14 @@ function BankAndCIFDropdown({token, selectedBank, setSelectedBank, selectedCIF, 
     async function getlistofcards() {
         setLoading(true)
 
+        if (selectedBank === "" || selectedCIF === "") {
+            alert("Please ensure both, Bank and CIF are selected.")
+            return
+        }
+
         try {
             const response = await fetch(
-                                            "http://localhost:8000/cardlist/getList?bank_key="+selectedBank,
+                                            "http://localhost:8000/cardlist/getList?bank_key="+selectedBank+"&cif="+selectedCIF,
                                                 {
                                                     method: "GET",
                                                     headers : {
