@@ -139,7 +139,7 @@ function CardListingCredit({token, cards, loading}) {
                         </tr>
                         <tr>
                             <th>Balance Status</th>
-                            <td>{card.HoldAmountSign === "+" ? "Owed to Bank" : "Owed to Client"}</td>
+                            <td>{Number(formatAmount(card.holdAmount, card.creditCardCurrency)) === 0 ? "Fully Settled" : card.HoldAmountSign === "+" ? "Owed to Bank" : "Owed to Client"}</td>
                         </tr>
                         <tr>
                             <th>Supplementary Status</th>
@@ -181,7 +181,7 @@ function CardListingCredit({token, cards, loading}) {
     }
     
     if (loading) {return <div>
-                    <h3>Credit Cards Loading</h3>
+                    <h3>Credit Cards Loading...</h3>
                 </div>}
 
     return (<div>

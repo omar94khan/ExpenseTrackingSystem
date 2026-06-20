@@ -170,7 +170,7 @@ function CardListingPrepaid({token, cards, loading}) {
     }
     
     if (loading) {return <div>
-                    <h3>Prepaid Cards Loading</h3>
+                    <h3>Prepaid Cards Loading...</h3>
                 </div>}
 
     return (<div>

@@ -64,7 +64,7 @@ function CardListingDebit({token, cards, loading}) {
     }
     
     if (loading) {return <div>
-                    <h3>Debit Cards Loading</h3>
+                    <h3>Debit Cards Loading...</h3>
                 </div>}
     return (<div>
                 <h3>Debit Cards</h3>
