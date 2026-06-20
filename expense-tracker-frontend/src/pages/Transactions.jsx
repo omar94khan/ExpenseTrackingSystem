@@ -1,7 +1,7 @@
 import {useState} from 'react';
 import { useNavigate } from "react-router-dom";
-import CreateTransactions from './CreateTransactions';
-import FetchTransactions from './FetchTransactions';
+import CreateTransactions from '../components/CreateTransactions';
+import FetchTransactions from '../components/FetchTransactions';
 
 
 function Transactions({token}) {

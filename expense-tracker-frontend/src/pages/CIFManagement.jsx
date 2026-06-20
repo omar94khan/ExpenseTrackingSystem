@@ -1,9 +1,9 @@
 import {useState} from 'react';
 import { useNavigate } from "react-router-dom";
-import CreateBanks from './CreateBank';
-import FetchBanks from './FetchBanksTable';
+import CreateBanks from '../components/CreateBank';
+import FetchBanks from '../components/FetchBanksTable';
 
-function BankManagement({token}) {
+function CIFManagement({token}) {
     const [refreshCount, setRefreshCount] = useState(0);
 
     return (<div>
@@ -13,4 +13,4 @@ function BankManagement({token}) {
             </div>);
 }
 
-export default BankManagement;
+export default CIFManagement;

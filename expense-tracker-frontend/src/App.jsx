@@ -8,7 +8,10 @@ import CardSummary from './pages/CardSummary';
 import UserCreate from './pages/UserCreate';
 import Layout from './pages/NavigationBar';
 import Settings from './pages/Settings';
-import AdminTools from './pages/AdminTools';
+import AdminTools from './pages/AdminTools/AdminTools';
+import BankManagement from './pages/AdminTools/BankManagement';
+import CIFManagement from './pages/CIFManagement';
+import UsersManagement from './pages/AdminTools/UsersManagement';
 
 function App() {
 
@@ -44,7 +47,10 @@ function App() {
                     <Route path="/reports" element={<Reports token={loginToken}/>} />
                     <Route path="/cards" element={<CardSummary token={loginToken}/>} />
                     <Route path="/settings" element={<Settings token={loginToken}/>} />
+                      <Route path="/settings/CIFManagement" element={<CIFManagement token={loginToken}/>} />
                     <Route path="/admintools" element={<AdminTools token={loginToken}/>} />
+                      <Route path="/admintools/bankManagement" element={<BankManagement token={loginToken}/>} />
+                      <Route path="/admintools/usersManagement" element={<UsersManagement token={loginToken}/>} />
                 </Route>
                 <Route path="/" element={<Navigate to="/login" />} />
                 <Route path="/logout" element={<Navigate to="/login" />} />

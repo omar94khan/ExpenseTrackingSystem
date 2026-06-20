@@ -1,8 +1,8 @@
 import { useState, useEffect } from 'react';
-import BankAndCIFDropdown from './BankAndCIFDropdown';
-import CardListingCredit from './CardListingCredit';
-import CardListingDebit from './CardListingDebit';
-import CardListingPrepaid from './CardListingPrepaid';
+import BankAndCIFDropdown from '../components/BankAndCIFDropdown';
+import CardListingCredit from '../components/CardListingCredit';
+import CardListingDebit from '../components/CardListingDebit';
+import CardListingPrepaid from '../components/CardListingPrepaid';
 
 function CardSummary({token}) {
 
