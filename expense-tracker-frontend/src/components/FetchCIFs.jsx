@@ -1,39 +1,26 @@
 import {useState, useEffect} from 'react';
+import {getBanksList} from './FetchBanksTable';
 
-export async function getBanksList(token) {
-        const endpoint = "http://localhost:8000/banks/fetch";
-        
-        try {
-            const response = await fetch(endpoint,
-                        {
-                            method: "GET",
-                            headers : {
-                                    "Authorization": "Bearer " + token,
-                                    "Content-Type": "application/json"
-                                }
-                        }
-                    );
-                if (!response.ok) {
-                        const errorData = await response.json();
-                        throw new Error(errorData.detail);
-                    }
-
-                const data = await response.json()
-                return data
-        }
-        catch(err) {
-                throw alert("Error fetching banks: "+err);
-            }
-    };
-
-
-function FetchBanks({token, refreshCount, setRefreshCount}) {
+function FetchCIFs({token, refreshCount, setRefreshCount}) {
 
     const [loading, setLoading] = useState(false);
+    const [cifs, setCIFs] = useState([]);
     const [banks, setBanks] = useState([]);
 
-    async function getBanks() {
-        const endpoint = "http://localhost:8000/banks/fetch";
+    useEffect(() => {
+        async function loadBanks() {
+            try {
+                const data = await getBanksList(token);
+                setBanks(data);
+            } catch (err) {
+                alert("Error fetching banks: "+err);
+            }
+        }
+        loadBanks()
+    },[])
+
+    async function getCIFs() {
+        const endpoint = "http://localhost:8000/cifs/fetch";
         setLoading(true);
         
         try {
@@ -52,10 +39,10 @@ function FetchBanks({token, refreshCount, setRefreshCount}) {
                     }
 
                 const data = await response.json();
-                setBanks(data);
+                setCIFs(data);
         }
         catch(err) {
-                throw alert("Error fetching banks: "+err);
+                throw alert("Error fetching CIFs: "+err);
             }
         finally {
             setLoading(false)
@@ -63,8 +50,8 @@ function FetchBanks({token, refreshCount, setRefreshCount}) {
     };
 
     
-    async function deleteBank(bank_key) {
-        const endpoint = "http://localhost:8000/banks/delete";
+    async function deleteCIF(bank_key, cif_id) {
+        const endpoint = "http://localhost:8000/cifs/delete";
         setLoading(true);
         
         try {
@@ -76,7 +63,8 @@ function FetchBanks({token, refreshCount, setRefreshCount}) {
                                     "Content-Type": "application/json"
                                 },
                             body: JSON.stringify({
-                                "bank_key" : bank_key
+                                "bank_key" : bank_key,
+                                "cif" : cif_id
                             })
                         }
                     );
@@ -90,7 +78,7 @@ function FetchBanks({token, refreshCount, setRefreshCount}) {
                 
         }
         catch(err) {
-                throw alert("Error deleting bank: "+err);
+                throw alert("Error Deleting CIF: "+err);
             }
         finally {
             setLoading(false)
@@ -99,28 +87,39 @@ function FetchBanks({token, refreshCount, setRefreshCount}) {
 
 
     useEffect(() => {
-        getBanks();
+        getCIFs();
     }, [refreshCount]);
 
     function populateTable() {
-        return banks.map((row) =>   <tr>
-                                        <td>{row.bank_key}</td>
-                                        <td>{row.bank_name}</td>
-                                        <td>{row.bank_bic}</td>
-                                        <td><button onClick={() => deleteBank(row.bank_key)}>Delete Bank</button></td>
-                                    </tr>);
+        
+        const cifsWithBankInfo = cifs.map(cif => ({
+                    ...cif,
+                    bank: banks.find(bank => bank.id === cif.bank_id)
+                }));
+        
+        return cifsWithBankInfo.map((row) =>   <tr key={row.id}>
+                                                    <td>{row.id}</td>
+                                                    <td>{row.bank?.bank_name ?? "Loading..."}</td>
+                                                    <td>{row.cif_id}</td>
+                                                    <td><button 
+                                                            disabled={!row.bank}
+                                                            onClick={() => deleteCIF(row.bank.bank_key, row.cif_id)}>
+                                                                Delete CIF
+                                                        </button>
+                                                    </td>
+                                                </tr>);
         };
 
 
 
     return (<div className='bank-management-div'>
-               <h3>List of Banks</h3>
+               <h3>List of CIFs</h3>
                 <table>
                     <thead>
                         <tr>
-                            <th>Bank Key</th>
+                            <th>ID</th>
                             <th>Bank Name</th>
-                            <th>Bank BIC</th>
+                            <th>CIF</th>
                             <th></th>
                         </tr>
                     </thead>
@@ -133,4 +132,4 @@ function FetchBanks({token, refreshCount, setRefreshCount}) {
             </div>)
 }
 
-export default FetchBanks;
+export default FetchCIFs;
