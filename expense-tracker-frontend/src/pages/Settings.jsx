@@ -1,30 +1,18 @@
-import {useState} from 'react';
+import { Outlet, Link, useNavigate } from "react-router-dom";
 
 
 function Settings({token}) {
 
-    
-    
-    return (<div>
-        <table>
-            <thead>
-                <tr>
-                    <th>Transaction Date</th>
-                    <th>Transaction Type</th>
-                    <th>Category</th>
-                    <th>Amount</th>
-                    <th>Description</th>
-                    <th></th>
-                </tr>
-            </thead>
 
-            <tbody>
-                <tr>
-                    
-                </tr>
-            </tbody>
-        </table>
-    </div>);
+
+
+    return <div>
+                <h1>Settings</h1>
+
+                <ul>
+                    <li> <Link to="/settings/CIFManagement">Manage CIFs</Link> </li>
+                </ul>
+            </div>
 }
 
 export default Settings;
