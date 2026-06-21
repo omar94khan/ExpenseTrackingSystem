@@ -5,11 +5,20 @@ from datetime import date
 import datetime as dt
 
 def create_user(db: Session, user: UserCreate, hashed_password: str):
-    db_user = Users(username=user.username, hashed_password=hashed_password, created_on=user.created_on, isAdmin = user.isAdmin)
+    db_user = Users(username=user.username, hashed_password=hashed_password, created_on=user.created_on, isAdmin = False)
     db.add(db_user)
     db.commit()
     db.refresh(db_user)
     return db_user
+
+
+def promote_user(db: Session, user_id: int, isAdmin: bool):
+    user = db.query(Users).filter(Users.id == user_id).first()
+    if user:
+        user.isAdmin = isAdmin
+        db.commit()
+    return user
+
 
 def get_user(db: Session, user_id: int):
     return db.query(Users).filter(Users.id == user_id).first()
