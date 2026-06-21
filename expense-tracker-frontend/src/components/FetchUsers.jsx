@@ -75,6 +75,7 @@ function FetchUsers({token, refreshCount, setRefreshCount}) {
                                         <td>{row.id}</td>
                                         <td>{row.username}</td>
                                         <td>{row.created_on}</td>
+                                        <td>{row.isAdmin}</td>
                                         <td><button onClick={() => deleteUser(row.id)}>Delete User</button></td>
                                     </tr>);
         };
@@ -89,6 +90,7 @@ function FetchUsers({token, refreshCount, setRefreshCount}) {
                             <th>User ID</th>
                             <th>Username</th>
                             <th>Created On</th>
+                            <th>Admin Rights</th>
                             <th></th>
                         </tr>
                     </thead>
