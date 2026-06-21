@@ -52,11 +52,22 @@ class UserOut(BaseModel):
 
     id: int
     username: str
-    isAdmin: bool
+    isAdmin: Optional[bool]
 
     # class Config:
     #     orm_mode = True  # allows SQLAlchemy objects to be returned directly
 
+# Response Schema
+class UserOutAdmin(BaseModel):
+    model_config = ConfigDict(from_attributes=True)  # allows SQLAlchemy objects to be returned directly
+
+    id: int
+    username: str
+    created_on: Optional[date]
+    isAdmin: Optional[bool]
+
+    # class Config:
+    #     orm_mode = True  # allows SQLAlchemy objects to be returned directly
 
 class TransactionOut(BaseModel):
     model_config = ConfigDict(from_attributes=True)  # allows SQLAlchemy objects to be returned directly

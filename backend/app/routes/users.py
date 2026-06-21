@@ -47,9 +47,11 @@ def get_user_by_code(
     
     return db_user
 
-@router.get('/fetchAll')
+@router.get('/fetchAll', response_model=schemas.UserOutAdmin)
 def get_all_users(
-    db: Session = Depends(get_db)
+    db: Session = Depends(get_db),
+    current_user = Depends(get_current_user),
+    isAdmin = Depends(get_admin)
 ):
     db_users = crud.get_all_users(db=db)
     
@@ -76,9 +78,13 @@ def get_user_by_username(
 def delete_user(
     user_id: int,
     db: Session = Depends(get_db),
-    current_user = Depends(get_current_user),
-    isAdmin = Depends(get_admin)
+    current_user = Depends(get_current_user)
 ):
+    
+    try:
+        isAdmin = Depends(get_admin)
+    except:
+        isAdmin = False
     
     if isAdmin:
         pass
