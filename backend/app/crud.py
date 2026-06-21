@@ -18,6 +18,9 @@ def get_user(db: Session, user_id: int):
 def get_user_by_username(db: Session, username: str):
     return db.query(Users).filter(Users.username == username).first()
 
+def get_all_users(db: Session):
+    return db.query(Users).all()
+
 
 def delete_user(db: Session, user_id: int):
     

@@ -47,6 +47,16 @@ def get_user_by_code(
     
     return db_user
 
+@router.get('/fetchAll')
+def get_all_users(
+    db: Session = Depends(get_db)
+):
+    db_users = crud.get_all_users(db=db)
+    
+    if not db_users:
+        raise HTTPException(status_code=404, detail="No users exist")
+    
+    return db_users
 
 @router.get('/by-username/{username}', response_model = schemas.UserOut)
 def get_user_by_username(
