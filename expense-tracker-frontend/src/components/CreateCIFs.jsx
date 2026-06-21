@@ -92,7 +92,7 @@ function CreateCIFs({token, refreshCount, setRefreshCount}) {
                 <tr>
                     <th>CIF ID</th>
                     <td>
-                        <input type='text' placeholder='Enter CIF here' onChange={(e) => setCIF(e.target.value)}></input>
+                        <input type='text' value={cif} placeholder='Enter CIF here' onChange={(e) => setCIF(e.target.value)}></input>
                     </td>
                 </tr>
                 <tr>

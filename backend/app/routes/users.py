@@ -3,7 +3,7 @@ from sqlalchemy.orm import Session
 from datetime import date
 
 from .. import crud, schemas, security, validations
-from ..deps import get_db, get_current_user
+from ..deps import get_db, get_current_user, get_admin
 
 router = APIRouter(prefix="/users", tags=["users"])
 
@@ -47,6 +47,18 @@ def get_user_by_code(
     
     return db_user
 
+@router.get('/fetchAll', response_model=schemas.UserOutAdmin)
+def get_all_users(
+    db: Session = Depends(get_db),
+    current_user = Depends(get_current_user),
+    isAdmin = Depends(get_admin)
+):
+    db_users = crud.get_all_users(db=db)
+    
+    if not db_users:
+        raise HTTPException(status_code=404, detail="No users exist")
+    
+    return db_users
 
 @router.get('/by-username/{username}', response_model = schemas.UserOut)
 def get_user_by_username(
@@ -69,7 +81,14 @@ def delete_user(
     current_user = Depends(get_current_user)
 ):
     
-    if current_user.id != user_id:
+    try:
+        isAdmin = Depends(get_admin)
+    except:
+        isAdmin = False
+    
+    if isAdmin:
+        pass
+    elif current_user.id != user_id:
         raise HTTPException(status_code=403, detail="Not authorized to delete this user")
 
     deleted_user = crud.delete_user(db,user_id)

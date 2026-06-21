@@ -1,4 +1,4 @@
-from sqlalchemy import Column, Integer, String, Date, ForeignKey, Float
+from sqlalchemy import Column, Integer, String, Date, ForeignKey, Float, Boolean
 from sqlalchemy.orm import relationship
 from .database import Base
 
@@ -10,6 +10,7 @@ class Users(Base):
     username = Column(String, nullable=False)
     hashed_password = Column(String, nullable=False)
     created_on = Column(Date, nullable=True)
+    isAdmin = Column(Boolean, nullable = True)
 
     transactions = relationship("Transactions", back_populates="transaction_user", cascade = "all, delete-orphan")
     cifs = relationship("UserCIF", back_populates="user_cifs", cascade = "all, delete-orphan")

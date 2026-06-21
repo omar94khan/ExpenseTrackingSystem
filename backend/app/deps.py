@@ -41,3 +41,29 @@ def get_current_user(
     if user is None:
         raise credentials_exception
     return user
+
+
+def get_admin(
+        token: str = Depends(oauth2_scheme), 
+        db: Session = Depends(get_db)
+        ):
+    
+    credentials_exception = HTTPException(
+        status_code=status.HTTP_401_UNAUTHORIZED,
+        detail="User does not have Admin rights",
+        headers={"WWW-Authenticate": "Bearer"},
+    )
+
+    try:
+        payload = security.decode_token(token)
+        user_id = payload.get("sub")
+        if user_id is None:
+            raise credentials_exception
+        user_id_int = int(user_id)
+    except (JWTError, ValueError):
+        raise credentials_exception
+
+    user = crud.get_admin(db, user_id_int)
+    if user is None:
+        raise credentials_exception
+    return user
