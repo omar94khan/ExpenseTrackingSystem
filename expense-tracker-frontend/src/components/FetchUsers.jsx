@@ -56,6 +56,42 @@ function FetchUsers({token, refreshCount, setRefreshCount}) {
                 const errorData = await response.json();
                 throw Error(errorData.detail)
             }
+
+            setRefreshCount((e) => e+1)
+        }
+        catch(err) {
+            throw alert("Error deleting user: "+err)
+        }
+        finally {
+            setLoading(false)
+        }
+    };
+
+    async function promoteUser(user_id, adminToggle) {
+        const endpoint = "http://localhost:8000/users/admin/promote"
+        setLoading(true)
+
+        try {
+            const response = await fetch(endpoint,
+                {
+                    method: "POST",
+                    headers: {
+                        "Authorization" : "Bearer "+token,
+                        "Content-Type" : "application/json"
+                    },
+                    body: JSON.stringify({
+                        "user_id" : user_id,
+                        "isAdmin" : adminToggle
+                    })
+                }
+            );
+
+            if (!response.ok) {
+                const errorData = await response.json();
+                throw Error(errorData.detail)
+            }
+
+            setRefreshCount((e) => e+1)
         }
         catch(err) {
             throw alert("Error deleting user: "+err)
@@ -77,6 +113,7 @@ function FetchUsers({token, refreshCount, setRefreshCount}) {
                                         <td>{row.created_on}</td>
                                         <td>{row.isAdmin}</td>
                                         <td><button onClick={() => deleteUser(row.id)}>Delete User</button></td>
+                                        <td><button onClick={() => promoteUser(row.id, row.isAdmin ? false : true)}>Toggle Admin</button></td>
                                     </tr>);
         };
 
@@ -91,6 +128,7 @@ function FetchUsers({token, refreshCount, setRefreshCount}) {
                             <th>Username</th>
                             <th>Created On</th>
                             <th>Admin Rights</th>
+                            <th></th>
                             <th></th>
                         </tr>
                     </thead>
