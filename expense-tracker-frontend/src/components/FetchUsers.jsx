@@ -42,7 +42,7 @@ function FetchUsers({token, refreshCount, setRefreshCount}) {
         setLoading(true)
 
         try {
-            const data = await fetch(endpoint,
+            const response = await fetch(endpoint,
                 {
                     method: "DELETE",
                     headers: {
@@ -53,7 +53,7 @@ function FetchUsers({token, refreshCount, setRefreshCount}) {
             );
 
             if (!response.ok) {
-                const errorData = await data.json();
+                const errorData = await response.json();
                 throw Error(errorData.detail)
             }
         }
