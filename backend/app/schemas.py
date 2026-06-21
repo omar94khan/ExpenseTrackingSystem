@@ -19,6 +19,7 @@ class UserCreate(BaseModel):
     username: str
     password: str  # plaintext for request; you will hash it before saving
     created_on: Optional[date] = None
+    isAdmin: Optional[bool] = False
 
 class TransactionCreate(BaseModel):
     amount: float
@@ -51,6 +52,7 @@ class UserOut(BaseModel):
 
     id: int
     username: str
+    isAdmin: bool
 
     # class Config:
     #     orm_mode = True  # allows SQLAlchemy objects to be returned directly

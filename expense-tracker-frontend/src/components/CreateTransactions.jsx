@@ -26,6 +26,11 @@ function CreateTransactions({token, refreshCount, setRefreshCount}) {
             return
         };
 
+        if (transactionCategory === "" || transactionCategory === undefined) {
+            alert("Please select Transaction Category.")
+            return
+        }
+
         const endpoint = "http://localhost:8000/transactions/create";
         setLoading(true);
         
@@ -55,6 +60,7 @@ function CreateTransactions({token, refreshCount, setRefreshCount}) {
                 setRefreshCount((e) => e + 1);
                 setTransactionAmount(0);
                 setTransactionDescription("");
+                setTransactionCategory("");
 
         }
         catch(err) {
@@ -73,7 +79,8 @@ function CreateTransactions({token, refreshCount, setRefreshCount}) {
 
     function populateOptions() {
             if (transactionType === "Income") {
-                return (<select id="transaction-category" onChange={(e) => setTransactionCategory(e.target.value)}>
+                return (<select id="transaction-category" value={transactionCategory} onChange={(e) => setTransactionCategory(e.target.value)}>
+                            <option></option>
                             <option>Salary</option>
                             <option>Rental Income</option>
                             <option>Sales</option>
@@ -83,7 +90,8 @@ function CreateTransactions({token, refreshCount, setRefreshCount}) {
                         </select>)
                     }
             else if (transactionType === "Expense") {
-                return (<select id="transaction-category" onChange={(e) => setTransactionCategory(e.target.value)}>
+                return (<select id="transaction-category" value={transactionCategory} onChange={(e) => setTransactionCategory(e.target.value)}>
+                            <option></option>
                             <option>Food</option>
                             <option>Rent</option>
                             <option>Education</option>
@@ -101,7 +109,7 @@ function CreateTransactions({token, refreshCount, setRefreshCount}) {
                         </select>)
                     }
             else if (transactionType === "Transfer") {
-                return (<select id="transaction-category" onChange={(e) => setTransactionCategory(e.target.value)} disabled>
+                return (<select id="transaction-category" value={transactionCategory} onChange={(e) => setTransactionCategory(e.target.value)} disabled>
                             <option>Transfer</option>
                         </select>)
                     }

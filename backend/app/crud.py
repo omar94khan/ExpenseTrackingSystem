@@ -18,6 +18,11 @@ def get_user(db: Session, user_id: int):
 def get_user_by_username(db: Session, username: str):
     return db.query(Users).filter(Users.username == username).first()
 
+def get_all_users(db: Session):
+    return db.query(Users).all()
+
+def get_admin(db: Session, user_id: int):
+    return db.query(Users).filter(Users.isAdmin == True).filter(Users.id == user_id).first()
 
 def delete_user(db: Session, user_id: int):
     
@@ -146,7 +151,7 @@ def add_bank(
     if bank_exists:
         return None
     
-    authorized_user = db.query(Users).filter(Users.id == user_id).first()
+    authorized_user = db.query(Users).filter(Users.id == user_id).filter(Users.isAdmin == True).first()
     if not authorized_user:
         return None
     
@@ -168,7 +173,7 @@ def delete_bank(
     if not bank_exists:
         return None
     
-    authorized_user = db.query(Users).filter(Users.id == user_id).first()
+    authorized_user = db.query(Users).filter(Users.id == user_id).filter(Users.isAdmin == True).first()
     if not authorized_user:
         return None
     

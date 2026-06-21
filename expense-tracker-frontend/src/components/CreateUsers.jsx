@@ -1,86 +1,131 @@
 import {useState} from 'react';
+import { unstable_setDevServerHooks } from 'react-router-dom';
 
 
 function CreateUsers({token, refreshCount, setRefreshCount}) {
 
     const [loading, setLoading] = useState(false);
-    const [bankKey, setBankKey] = useState("");
-    const [bankName, setBankName] = useState("");
-    const [bankBIC, setBankBIC] = useState("");
+    const [username, setUsername] = useState("");
+    const [password, setPassword] = useState("");
+    const [date, setDate] = useState(getTodayDate());
+    const [isAdmin, setIsAdmin] = useState(false)
 
-    async function CreateBank() {
-        if (bankName === "") {
-            alert("Bank Name Cannot be Empty.");
+    function getTodayDate() {
+        const today = new Date();
+        const year = today.getFullYear()
+        const month = String(today.getMonth() + 1).padStart(2,"0");
+        const day = String(today.getDate()).padStart(2,"0");
+
+        return `${year}-${month}-${day}`;
+    };
+
+    async function CreateUser() {
+        if (username==="" || username ===undefined) {
+            alert("Username cannot be empty")
             return
-        };
-
-        if (bankKey === "") {
-            alert("Bank Key Cannot be Empty");
-            return
-        };
-
-
-        const endpoint = "http://localhost:8000/banks/create";
-        setLoading(true);
-        
-        try { 
-                const response = await fetch(endpoint,
-                        {
-                            method: "POST",
-                            headers : {
-                                    "Authorization": "Bearer " + token,
-                                    "Content-Type": "application/json"
-                                },
-                            body : JSON.stringify({
-                                "bank_name" : bankName,
-                                "bank_key" : bankKey,
-                                "bank_bic" : bankBIC
-                            })
-                        }
-                    );
-                if (!response.ok) {
-                        const errorData = await response.json();
-                        throw new Error(errorData.detail);
-                    }
-
-                const data = await response.json();
-                setRefreshCount((e) => e + 1);
-                setBankName("");
-                setBankKey("");
-                setBankBIC("");
-
         }
-        catch(err) {
-                throw alert("Error adding bank: "+err);
+
+        if (password.length < 6 || password===undefined) {
+            alert("Password cannot be less than 6 characters.")
+            return
+        }
+
+        const endpoint = "http://localhost:8000/users/create"
+        setLoading(true)
+
+        try {
+            const response = await fetch(endpoint,
+                {
+                    method: "POST",
+                    headers: {
+                        "Authorization" : "Bearer "+token,
+                        "Content-Type" : "application/json"
+                    },
+                    body: JSON.stringify({
+                        "username" : username,
+                        "password" : password,
+                        "created_on" : date,
+                        "isAdmin" : isAdmin
+                    })
+                }
+            );
+            if (!response.ok) {
+                const errorData = await response.json();
+                throw new Error(errorData.detail);
             }
-        finally {
-            setLoading(false)
+
+            const data = await response.json()
+            setRefreshCount((e) => e+1);
+            setUsername("");
+            setPassword("");
+            setDate(getTodayDate());
+            setIsAdmin(false)
         }
+
+        catch (err) {
+            throw alert("Error creating user: "+err)
+        }
+
+        finally {
+            setLoading(false);
+        }
+
     };
 
     
-    return (<div className='bank-management-div'>
-        <h3>Add New Bank</h3>
-        <table>
-            <thead>
-                <tr>
-                    <th>Bank Key</th>
-                    <th>Bank Name</th>
-                    <th>Bank BIC</th>
-                    <th></th>
-                </tr>
-            </thead>
+        
 
-            <tbody>
-                <tr>
-                    <td><input type="text" onChange={(e) => setBankKey(e.target.value)} value={bankKey} /></td>
-                    <td><input type="text" onChange={(e) => setBankName(e.target.value)} value={bankName} /></td>
-                    <td><input type="text" onChange={(e) => setBankBIC(e.target.value)} value={bankBIC} /></td>
-                    <td><button onClick={() => CreateBank()}>Add Bank</button> </td>
-                </tr>
-            </tbody>
-        </table>
-    </div>);
+    
+    return (<div className='user-management-div'>
+                {/* To create a user we will need the following:
+                    1 - Username
+                    2 - Password
+                    3 - Email
+                    4 -  */}
+
+                <table>
+                    <thead>
+                        <tr>
+                            <th>New User Details</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+                        <tr>
+                            <th>Username</th>
+                            <td>
+                                <input type='text' value={username} onChange={(e) => setUsername(e.target.value)} />
+                            </td>
+                        </tr>
+                        
+                        <tr>
+                            <th>Password</th>
+                            <td>
+                                <input type='password' value={password} onChange={(e) => setPassword(e.target.value)} />
+                            </td>
+                        </tr>
+                        
+                        <tr>
+                            <th>Date</th>
+                            <td>
+                                <input type='date' value={date} onChange={(e) => setDate(e.target.value)} />
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <th>Admin Rights</th>
+                            <td>
+                                <input type='checkbox' checked={isAdmin} onChange={(e) => setIsAdmin(e.target.checked)} />
+                            </td>
+                        </tr>
+                        
+                        <tr>
+                            <button onClick={() => CreateUser()}>Create User</button>
+                        </tr>
+                    </tbody>
+                </table>
+        
+            </div>);
 }
 
 export default CreateUsers;
