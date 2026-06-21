@@ -8,7 +8,6 @@ function CreateUsers({token, refreshCount, setRefreshCount}) {
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
     const [date, setDate] = useState(getTodayDate());
-    const [isAdmin, setIsAdmin] = useState(false)
 
     function getTodayDate() {
         const today = new Date();
@@ -44,8 +43,7 @@ function CreateUsers({token, refreshCount, setRefreshCount}) {
                     body: JSON.stringify({
                         "username" : username,
                         "password" : password,
-                        "created_on" : date,
-                        "isAdmin" : isAdmin
+                        "created_on" : date
                     })
                 }
             );
@@ -59,7 +57,6 @@ function CreateUsers({token, refreshCount, setRefreshCount}) {
             setUsername("");
             setPassword("");
             setDate(getTodayDate());
-            setIsAdmin(false)
         }
 
         catch (err) {
@@ -109,13 +106,6 @@ function CreateUsers({token, refreshCount, setRefreshCount}) {
                             <th>Date</th>
                             <td>
                                 <input type='date' value={date} onChange={(e) => setDate(e.target.value)} />
-                            </td>
-                        </tr>
-
-                        <tr>
-                            <th>Admin Rights</th>
-                            <td>
-                                <input type='checkbox' checked={isAdmin} onChange={(e) => setIsAdmin(e.target.checked)} />
                             </td>
                         </tr>
                         

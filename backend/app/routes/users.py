@@ -34,6 +34,15 @@ def create_user(
     hashed_password = security.hash_password(user.password)
     return crud.create_user(db, user, hashed_password)
 
+@router.post("/admin/promote", response_model=schemas.UserOutAdmin)
+def promote_user(
+    user_id : int,
+    isAdmin : bool,
+    admin_check = Depends(get_admin),
+    db: Session = Depends(get_db)
+):
+    
+    return crud.promote_user(db, user_id=user_id, isAdmin=isAdmin)
 
 @router.get('/fetch/{user_id}', response_model = schemas.UserOut)
 def get_user_by_code(
@@ -81,12 +90,7 @@ def delete_user(
     current_user = Depends(get_current_user)
 ):
     
-    try:
-        isAdmin = Depends(get_admin)
-    except:
-        isAdmin = False
-    
-    if isAdmin:
+    if current_user.isAdmin:
         pass
     elif current_user.id != user_id:
         raise HTTPException(status_code=403, detail="Not authorized to delete this user")
