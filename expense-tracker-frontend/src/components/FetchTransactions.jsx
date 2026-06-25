@@ -63,7 +63,7 @@ function FetchTransactions({token, refreshCount, setRefreshCount}) {
                                         <td>{row.date}</td>
                                         <td>{row.transaction_type}</td>
                                         <td>{row.category}</td>
-                                        <td>{row.amount}</td>
+                                        <td key={tranAmount}>{row.amount}</td>
                                         <td>{row.description}</td>
                                         <td><button onClick={() => deleteTransactions(row.id)}>Delete Transaction</button></td>
                                     </tr>);
@@ -89,6 +89,17 @@ function FetchTransactions({token, refreshCount, setRefreshCount}) {
                     <tbody>
                         {populateTable()}
                     </tbody>
+                    <tfoot>
+                        <tr>
+                            <th>S No</th>
+                            <th>Date</th>
+                            <th>Transaction Type</th>
+                            <th>Category</th>
+                            <th>Amount</th>
+                            <th>Description</th>
+                            <th></th>
+                        </tr>
+                    </tfoot>
                 </table>
             
             </div>)

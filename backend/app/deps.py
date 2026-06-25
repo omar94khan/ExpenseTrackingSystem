@@ -63,7 +63,7 @@ def get_admin(
         payload = security.decode_token(token)
         user_id = payload.get("sub")
         if user_id is None:
-            raise credentials_exception
+            raise login_exception
         user_id_int = int(user_id)
     except (JWTError, ValueError):
         raise login_exception
