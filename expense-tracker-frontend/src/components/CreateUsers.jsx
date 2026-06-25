@@ -83,7 +83,7 @@ function CreateUsers({token, refreshCount, setRefreshCount}) {
                 <table>
                     <thead>
                         <tr>
-                            <th>New User Details</th>
+                            <th colSpan={2}>New User Details</th>
                         </tr>
                     </thead>
 

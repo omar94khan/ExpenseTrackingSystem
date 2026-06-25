@@ -68,7 +68,7 @@ function FetchUsers({token, refreshCount, setRefreshCount}) {
     };
 
     async function promoteUser(user_id, adminToggle) {
-        const endpoint = "http://localhost:8000/users/admin/promote"
+        const endpoint = "http://localhost:8000/users/admin/promote?user_id="+user_id+"&isAdmin="+adminToggle
         setLoading(true)
 
         try {
@@ -78,11 +78,7 @@ function FetchUsers({token, refreshCount, setRefreshCount}) {
                     headers: {
                         "Authorization" : "Bearer "+token,
                         "Content-Type" : "application/json"
-                    },
-                    body: JSON.stringify({
-                        "user_id" : user_id,
-                        "isAdmin" : adminToggle
-                    })
+                    }
                 }
             );
 
@@ -92,9 +88,10 @@ function FetchUsers({token, refreshCount, setRefreshCount}) {
             }
 
             setRefreshCount((e) => e+1)
+            alert("User Admin status successfully changed.")
         }
         catch(err) {
-            throw alert("Error deleting user: "+err)
+            throw alert("Error changing user Admin status: "+err)
         }
         finally {
             setLoading(false)
@@ -111,7 +108,7 @@ function FetchUsers({token, refreshCount, setRefreshCount}) {
                                         <td>{row.id}</td>
                                         <td>{row.username}</td>
                                         <td>{row.created_on}</td>
-                                        <td>{row.isAdmin}</td>
+                                        <td>{row.isAdmin ? "Granted" : "Not Granted"}</td>
                                         <td><button onClick={() => deleteUser(row.id)}>Delete User</button></td>
                                         <td><button onClick={() => promoteUser(row.id, row.isAdmin ? false : true)}>Toggle Admin</button></td>
                                     </tr>);

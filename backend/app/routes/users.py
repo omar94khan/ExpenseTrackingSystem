@@ -56,12 +56,13 @@ def get_user_by_code(
     
     return db_user
 
-@router.get('/fetchAll', response_model=schemas.UserOutAdmin)
+@router.get('/fetchAll', response_model=list[schemas.UserOutAdmin]) #
 def get_all_users(
     db: Session = Depends(get_db),
     current_user = Depends(get_current_user),
     isAdmin = Depends(get_admin)
 ):
+    
     db_users = crud.get_all_users(db=db)
     
     if not db_users:
