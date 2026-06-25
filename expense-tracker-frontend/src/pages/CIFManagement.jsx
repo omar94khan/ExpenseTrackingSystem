@@ -7,7 +7,7 @@ function CIFManagement({token}) {
     const [refreshCount, setRefreshCount] = useState(0);
 
     return (<div>
-                <h2>Manage CIFs</h2>
+                <h2>Manage My CIFs</h2>
                 <CreateCIFs token={token} refreshCount={refreshCount} setRefreshCount={setRefreshCount} />
                 <FetchCIFs token={token} refreshCount={refreshCount} setRefreshCount={setRefreshCount} />
             </div>);
