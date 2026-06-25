@@ -41,8 +41,12 @@ def promote_user(
     admin_check = Depends(get_admin),
     db: Session = Depends(get_db)
 ):
+    db_users = crud.promote_user(db, user_id=user_id, isAdmin=isAdmin)
     
-    return crud.promote_user(db, user_id=user_id, isAdmin=isAdmin)
+    if not db_users:
+        raise HTTPException(status_code=404, detail="The user you are trying to promote does not exist")
+    
+    return db_users
 
 @router.get('/fetch/{user_id}', response_model = schemas.UserOut)
 def get_user_by_code(
