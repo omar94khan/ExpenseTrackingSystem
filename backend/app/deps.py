@@ -51,6 +51,11 @@ def get_admin(
     credentials_exception = HTTPException(
         status_code=status.HTTP_403_FORBIDDEN,
         detail="User does not have Admin rights",
+    )
+
+    login_exception = HTTPException(
+        status_code=status.HTTP_401_UNAUTHORIZED,
+        detail="Could not validate credentials",
         headers={"WWW-Authenticate": "Bearer"},
     )
 
@@ -61,7 +66,7 @@ def get_admin(
             raise credentials_exception
         user_id_int = int(user_id)
     except (JWTError, ValueError):
-        raise credentials_exception
+        raise login_exception
 
     user = crud.get_admin(db, user_id_int)
     if user is None:

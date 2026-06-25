@@ -38,6 +38,7 @@ function FetchTransactions({token, refreshCount, setRefreshCount}) {
         
         try {
             const response = await apiFetch(endpoint,options)
+            if (!response) {return}
 
             const data = await response.json();
             setRefreshCount((e) => e + 1);

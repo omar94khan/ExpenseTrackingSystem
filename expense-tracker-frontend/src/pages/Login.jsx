@@ -26,7 +26,7 @@ function Login({tokenSetter}) {
         
 
         try {
-                const response = await apiFetch(endpoint,options)
+                const response = await apiFetch(endpoint,options, {skipAuthRedirect : true})
                 
                 const data = await response.json();
                 

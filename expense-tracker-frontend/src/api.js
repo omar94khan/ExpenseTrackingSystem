@@ -1,6 +1,6 @@
 const BASE_URL = "http://localhost:8000";
 
-export async function apiFetch(path, options = {}) {
+export async function apiFetch(path, options = {}, { skipAuthRedirect = false } = {}) {
     const token = localStorage.getItem("token");
 
     const response = await fetch(BASE_URL + path, {
@@ -12,13 +12,13 @@ export async function apiFetch(path, options = {}) {
         },
     });
 
-    if (response.status === 401) {
+    if (response.status === 401 && !skipAuthRedirect) {
         localStorage.removeItem("token");
         window.location.href = "/login";
         return;
     }
 
-    else if (!response.ok) {
+    if (!response.ok) {
         const errorData = await response.json();
         throw new Error(errorData.detail);
     }
