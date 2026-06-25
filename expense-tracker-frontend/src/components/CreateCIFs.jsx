@@ -1,6 +1,6 @@
 import {useState, useEffect} from 'react';
 import {getBanksList} from './FetchBanksTable';
-
+import { apiFetch } from '../api';
 
 
 function CreateCIFs({token, refreshCount, setRefreshCount}) {
@@ -34,27 +34,20 @@ function CreateCIFs({token, refreshCount, setRefreshCount}) {
         };
 
 
-        const endpoint = "http://localhost:8000/cifs/create";
+        const endpoint = "/cifs/create";
+        const options = {
+            method : "POST",
+            body : JSON.stringify({
+                        "bank_key" : selectedBank,
+                        "cif" : cif
+                    })
+        }
         setLoading(true);
         
         try { 
-                const response = await fetch(endpoint,
-                        {
-                            method: "POST",
-                            headers : {
-                                    "Authorization": "Bearer " + token,
-                                    "Content-Type": "application/json"
-                                },
-                            body : JSON.stringify({
-                                "bank_key" : selectedBank,
-                                "cif" : cif
-                            })
-                        }
-                    );
-                if (!response.ok) {
-                        const errorData = await response.json();
-                        throw new Error(errorData.detail);
-                    }
+                const response = await apiFetch(endpoint,options);
+
+                if (!response) {return};
 
                 const data = await response.json();
                 setRefreshCount((e) => e + 1);

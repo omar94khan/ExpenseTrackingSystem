@@ -1,5 +1,5 @@
 import {useState, useEffect} from 'react';
-
+import { apiFetch } from '../api';
 
 function FetchUsers({token, refreshCount, setRefreshCount}) {
 
@@ -7,26 +7,20 @@ function FetchUsers({token, refreshCount, setRefreshCount}) {
     const [users, setUsers] = useState([]);
 
     async function getUsers() {
-        const endpoint = "http://localhost:8000/users/fetchAll";
+        const endpoint = "/users/fetchAll";
+        const options = {
+                    method: "GET"
+                };
+
         setLoading(true);
         
         try {
-            const response = await fetch(endpoint,
-                        {
-                            method: "GET",
-                            headers : {
-                                    "Authorization": "Bearer " + token,
-                                    "Content-Type": "application/json"
-                                }
-                        }
-                    );
-                if (!response.ok) {
-                        const errorData = await response.json();
-                        throw new Error(errorData.detail);
-                    }
+            const response = await apiFetch(endpoint, options);
 
-                const data = await response.json();
-                setUsers(data);
+            if (!response) {return};
+
+            const data = await response.json();
+            setUsers(data);
         }
         catch(err) {
                 throw alert("Error fetching users: "+err);
@@ -38,24 +32,16 @@ function FetchUsers({token, refreshCount, setRefreshCount}) {
 
     
     async function deleteUser(user_id) {
-        const endpoint = "http://localhost:8000/users/delete/"+user_id;
+        const endpoint = "/users/delete/"+user_id;
+        const options = {
+                    method: "DELETE"
+                };
         setLoading(true)
 
         try {
-            const response = await fetch(endpoint,
-                {
-                    method: "DELETE",
-                    headers: {
-                        "Authorization" : "Bearer "+token,
-                        "Content-Type" : "application/json"
-                    }
-                }
-            );
+            const response = await apiFetch(endpoint, options);
 
-            if (!response.ok) {
-                const errorData = await response.json();
-                throw Error(errorData.detail)
-            }
+            if (!response) return
 
             setRefreshCount((e) => e+1)
         }
@@ -68,24 +54,16 @@ function FetchUsers({token, refreshCount, setRefreshCount}) {
     };
 
     async function promoteUser(user_id, adminToggle) {
-        const endpoint = "http://localhost:8000/users/admin/promote?user_id="+user_id+"&isAdmin="+adminToggle
+        const endpoint = "/users/admin/promote?user_id="+user_id+"&isAdmin="+adminToggle
+        const options = {
+                    method: "POST"
+                }; 
         setLoading(true)
 
         try {
-            const response = await fetch(endpoint,
-                {
-                    method: "POST",
-                    headers: {
-                        "Authorization" : "Bearer "+token,
-                        "Content-Type" : "application/json"
-                    }
-                }
-            );
+            const response = await apiFetch(endpoint, options)
 
-            if (!response.ok) {
-                const errorData = await response.json();
-                throw Error(errorData.detail)
-            }
+            if (!response) {return};
 
             setRefreshCount((e) => e+1)
             alert("User Admin status successfully changed.")

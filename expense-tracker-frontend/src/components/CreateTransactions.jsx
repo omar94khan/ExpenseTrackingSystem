@@ -1,5 +1,5 @@
 import {useState} from 'react';
-
+import { apiFetch } from '../api';
 
 function CreateTransactions({token, refreshCount, setRefreshCount}) {
 
@@ -31,30 +31,22 @@ function CreateTransactions({token, refreshCount, setRefreshCount}) {
             return
         }
 
-        const endpoint = "http://localhost:8000/transactions/create";
+        const endpoint = "/transactions/create";
+        const options = {
+            method:"POST",
+            body : JSON.stringify({
+                    "amount" : transactionAmount,
+                    "transaction_type" : transactionType,
+                    "category" : transactionCategory,
+                    "date" : transactionTime,
+                    "description" : transactionDescription
+                })
+        }
         setLoading(true);
         
         try { 
-                const response = await fetch(endpoint,
-                        {
-                            method: "POST",
-                            headers : {
-                                    "Authorization": "Bearer " + token,
-                                    "Content-Type": "application/json"
-                                },
-                            body : JSON.stringify({
-                                "amount" : transactionAmount,
-                                "transaction_type" : transactionType,
-                                "category" : transactionCategory,
-                                "date" : transactionTime,
-                                "description" : transactionDescription
-                            })
-                        }
-                    );
-                if (!response.ok) {
-                        const errorData = await response.json();
-                        throw new Error(errorData.detail);
-                    }
+                const response = await apiFetch(endpoint,options);
+                if (!response) {return}
 
                 const data = await response.json();
                 setRefreshCount((e) => e + 1);

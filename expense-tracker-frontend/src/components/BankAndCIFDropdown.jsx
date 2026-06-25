@@ -1,4 +1,5 @@
 import {useState, useEffect} from 'react';
+import { apiFetch } from '../api';
 
 
 function BankAndCIFDropdown({token, selectedBank, setSelectedBank, selectedCIF, setSelectedCIF, setCards, cards, loading, setLoading}) {
@@ -10,26 +11,19 @@ function BankAndCIFDropdown({token, selectedBank, setSelectedBank, selectedCIF, 
     const [bankID, setBankID] = useState("")
 
     async function getBanks() {
-        const endpoint = "http://localhost:8000/banks/fetch";
+        const endpoint = "/banks/fetch";
+        const options = {
+            method : "GET"
+        }
         setLoading(true);
         
         try {
-            const response = await fetch(endpoint,
-                        {
-                            method: "GET",
-                            headers : {
-                                    "Authorization": "Bearer " + token,
-                                    "Content-Type": "application/json"
-                                }
-                        }
-                    );
-                if (!response.ok) {
-                        const errorData = await response.json();
-                        throw new Error(errorData.detail);
-                    }
+            const response = await apiFetch(endpoint,options)
 
-                const data = await response.json();
-                setBanks(data);
+            if (!response) {return}
+
+            const data = await response.json();
+            setBanks(data);
         }
         catch(err) {
                 throw alert("Error fetching banks: "+err);
@@ -70,24 +64,16 @@ function BankAndCIFDropdown({token, selectedBank, setSelectedBank, selectedCIF, 
 
 
     async function getCIFs() {
-        const endpoint = "http://localhost:8000/cifs/fetch"
+        const endpoint = "/cifs/fetch"
+        const options = {
+            method: "GET"
+        };
         setLoading(true);
 
         try {
-                const response = await fetch(endpoint,
-                    {
-                        method: "GET",
-                        headers : {
-                                "Authorization": "Bearer " + token,
-                                "Content-Type": "application/json"
-                            }
-                    }
-                )
+                const response = await apiFetch(endpoint,options);
 
-                if (!response.ok) {
-                        const errorData = await response.json();
-                        throw new Error(errorData.detail);
-                    }
+                if (!response) {return}
 
                 const data = await response.json();
                 setCIFs(data);
@@ -124,26 +110,19 @@ function BankAndCIFDropdown({token, selectedBank, setSelectedBank, selectedCIF, 
         }
 
         try {
-            const response = await fetch(
-                                            "http://localhost:8000/cardlist/getList?bank_key="+selectedBank+"&cif="+selectedCIF,
-                                                {
-                                                    method: "GET",
-                                                    headers : {
-                                                            "Authorization": "Bearer " + token,
-                                                            "Content-Type": "application/json"
-                                                        }
-                                                }
-                                        )
+            const endpoint = "/cardlist/getList?bank_key="+selectedBank+"&cif="+selectedCIF;
+            const options = {
+                    method: "GET"
+                };
 
-            if (!response.ok) {
-                                const errorData = await response.json();
-                                throw new Error(errorData.detail);
-                            }
+            const response = await apiFetch(endpoint, options)
+
+            if (!response) {return}
                 
-                const data = await response.json();
-                setCards(data);
+            const data = await response.json();
+            setCards(data);
 
-            }
+        }
 
         catch (err) {
             throw alert("Error fetching Cards: "+err);

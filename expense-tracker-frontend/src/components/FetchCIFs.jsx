@@ -1,5 +1,6 @@
 import {useState, useEffect} from 'react';
 import {getBanksList} from './FetchBanksTable';
+import { apiFetch } from '../api';
 
 function FetchCIFs({token, refreshCount, setRefreshCount}) {
 
@@ -20,26 +21,18 @@ function FetchCIFs({token, refreshCount, setRefreshCount}) {
     },[])
 
     async function getCIFs() {
-        const endpoint = "http://localhost:8000/cifs/fetch";
+        const endpoint = "/cifs/fetch";
+        const options = {
+            method:"GET"
+        }
         setLoading(true);
         
         try {
-            const response = await fetch(endpoint,
-                        {
-                            method: "GET",
-                            headers : {
-                                    "Authorization": "Bearer " + token,
-                                    "Content-Type": "application/json"
-                                }
-                        }
-                    );
-                if (!response.ok) {
-                        const errorData = await response.json();
-                        throw new Error(errorData.detail);
-                    }
+            const response = await apiFetch(endpoint,options);
+            if (!response) {return};
 
-                const data = await response.json();
-                setCIFs(data);
+            const data = await response.json();
+            setCIFs(data);
         }
         catch(err) {
                 throw alert("Error fetching CIFs: "+err);
@@ -51,30 +44,22 @@ function FetchCIFs({token, refreshCount, setRefreshCount}) {
 
     
     async function deleteCIF(bank_key, cif_id) {
-        const endpoint = "http://localhost:8000/cifs/delete";
+        const endpoint = "/cifs/delete";
+        const options = {
+            method:"DELETE",
+            body: JSON.stringify({
+                        "bank_key" : bank_key,
+                        "cif" : cif_id
+                    })
+        }
         setLoading(true);
         
         try {
-            const response = await fetch(endpoint,
-                        {
-                            method: "DELETE",
-                            headers : {
-                                    "Authorization": "Bearer " + token,
-                                    "Content-Type": "application/json"
-                                },
-                            body: JSON.stringify({
-                                "bank_key" : bank_key,
-                                "cif" : cif_id
-                            })
-                        }
-                    );
-                if (!response.ok) {
-                        const errorData = await response.json();
-                        throw new Error(errorData.detail);
-                    }
+            const response = await apiFetch(endpoint,options);
+            if (!response) {return}
 
-                const data = await response.json();
-                setRefreshCount((e) => e + 1);
+            const data = await response.json();
+            setRefreshCount((e) => e + 1);
                 
         }
         catch(err) {

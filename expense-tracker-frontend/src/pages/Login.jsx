@@ -1,5 +1,6 @@
 import {useState} from 'react';
 import { useNavigate } from "react-router-dom";
+import { apiFetch } from '../api';
 
 function Login({tokenSetter}) {
 
@@ -9,31 +10,23 @@ function Login({tokenSetter}) {
     const [loading, setLoading] = useState(false);
 
     async function userlogin() {
-        const endpoint = "http://localhost:8000/auth/login-json"
+        const endpoint = "/auth/login-json"
+        const options = {
+            method:"POST",
+            body: JSON.stringify(
+                        {
+                            "username" : username,
+                            "password" : password
+                        }
+                    )
+        }
 
         setLoading(true);
 
         
 
         try {
-                const response = await fetch(endpoint,
-                        {
-                            method: "POST",
-                            headers : {
-                                    "Content-Type": "application/json"
-                                },
-                            body: JSON.stringify(
-                                    {
-                                        "username" : username,
-                                        "password" : password
-                                    }
-                                )
-                        }
-                    );
-                if (!response.ok) {
-                        const errorData = await response.json();
-                        throw new Error(errorData.detail);
-                    }
+                const response = await apiFetch(endpoint,options)
                 
                 const data = await response.json();
                 

@@ -1,4 +1,5 @@
 import {useState} from 'react';
+import { apiFetch } from '../api';
 
 
 function CreateBanks({token, refreshCount, setRefreshCount}) {
@@ -20,28 +21,21 @@ function CreateBanks({token, refreshCount, setRefreshCount}) {
         };
 
 
-        const endpoint = "http://localhost:8000/banks/create";
+        const endpoint = "/banks/create";
+        const options = {
+            method: "POST",
+            body: JSON.stringify({
+                "bank_name" : bankName,
+                "bank_key" : bankKey,
+                "bank_bic" : bankBIC
+            })
+        }
         setLoading(true);
         
         try { 
-                const response = await fetch(endpoint,
-                        {
-                            method: "POST",
-                            headers : {
-                                    "Authorization": "Bearer " + token,
-                                    "Content-Type": "application/json"
-                                },
-                            body : JSON.stringify({
-                                "bank_name" : bankName,
-                                "bank_key" : bankKey,
-                                "bank_bic" : bankBIC
-                            })
-                        }
-                    );
-                if (!response.ok) {
-                        const errorData = await response.json();
-                        throw new Error(errorData.detail);
-                    }
+                const response = await apiFetch(endpoint,options);
+
+                if (!response) {return}
 
                 const data = await response.json();
                 setRefreshCount((e) => e + 1);

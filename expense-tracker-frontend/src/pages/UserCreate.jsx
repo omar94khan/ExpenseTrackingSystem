@@ -1,5 +1,6 @@
 import {useState} from 'react';
 import { useNavigate } from "react-router-dom";
+import { apiFetch } from '../api';
 
 function UserCreate() {
 
@@ -13,31 +14,25 @@ function UserCreate() {
         if (username === "" || username === undefined) {throw alert("Username cannot be empty")}
         if (pass2 !== password) {throw alert("Passwords must match.")}
 
-        const endpoint = "http://localhost:8000/users/create"
+        const endpoint = "/users/create"
+        const options = {
+            method:"POST",
+            body: JSON.stringify(
+                    {
+                        "username" : username,
+                        "password" : password
+                    }
+                )
+        }
 
         setLoading(true);
 
         
 
         try {
-                const response = await fetch(endpoint,
-                        {
-                            method: "POST",
-                            headers : {
-                                    "Content-Type": "application/json"
-                                },
-                            body: JSON.stringify(
-                                    {
-                                        "username" : username,
-                                        "password" : password
-                                    }
-                                )
-                        }
-                    );
-                if (!response.ok) {
-                        const errorData = await response.json();
-                        throw new Error(errorData.detail);
-                    }
+                const response = await apiFetch(endpoint,options);
+                if (!response) {return};
+
                 const data = await response.json();
                 alert("User created successfully with userid "+data.id+". \nNavigating back to login page.")
                 return navigate("/login");

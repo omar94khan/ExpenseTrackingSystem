@@ -1,5 +1,6 @@
 import {useState} from 'react';
 import { unstable_setDevServerHooks } from 'react-router-dom';
+import { apiFetch } from '../api';
 
 
 function CreateUsers({token, refreshCount, setRefreshCount}) {
@@ -29,28 +30,20 @@ function CreateUsers({token, refreshCount, setRefreshCount}) {
             return
         }
 
-        const endpoint = "http://localhost:8000/users/create"
+        const endpoint = "/users/create"
+        const options = {
+            method: "POST",
+            body: JSON.stringify({
+                    "username" : username,
+                    "password" : password,
+                    "created_on" : date
+                })
+        }
         setLoading(true)
 
         try {
-            const response = await fetch(endpoint,
-                {
-                    method: "POST",
-                    headers: {
-                        "Authorization" : "Bearer "+token,
-                        "Content-Type" : "application/json"
-                    },
-                    body: JSON.stringify({
-                        "username" : username,
-                        "password" : password,
-                        "created_on" : date
-                    })
-                }
-            );
-            if (!response.ok) {
-                const errorData = await response.json();
-                throw new Error(errorData.detail);
-            }
+            const response = await apiFetch(endpoint,options)
+            if (!response) {return};
 
             const data = await response.json()
             setRefreshCount((e) => e+1);

@@ -1,5 +1,5 @@
 import {useState, useEffect} from 'react';
-
+import { apiFetch } from '../api';
 
 function FetchTransactions({token, refreshCount, setRefreshCount}) {
 
@@ -7,23 +7,15 @@ function FetchTransactions({token, refreshCount, setRefreshCount}) {
     const [transactions, setTransactions] = useState([]);
 
     async function getTransactions() {
-        const endpoint = "http://localhost:8000/transactions/fetch";
+        const endpoint = "/transactions/fetch";
+        const options = {
+            method: "GET"
+        }
         setLoading(true);
         
         try {
-            const response = await fetch(endpoint,
-                        {
-                            method: "GET",
-                            headers : {
-                                    "Authorization": "Bearer " + token,
-                                    "Content-Type": "application/json"
-                                }
-                        }
-                    );
-                if (!response.ok) {
-                        const errorData = await response.json();
-                        throw new Error(errorData.detail);
-                    }
+            const response = await apiFetch(endpoint,options);
+            if (!response) {return};
 
                 const data = await response.json();
                 setTransactions(data);
@@ -38,26 +30,17 @@ function FetchTransactions({token, refreshCount, setRefreshCount}) {
 
     
     async function deleteTransactions(transaction_id) {
-        const endpoint = "http://localhost:8000/transactions/delete/"+transaction_id;
+        const endpoint = "/transactions/delete/"+transaction_id;
+        const options = {
+            method:"DELETE"
+        }
         setLoading(true);
         
         try {
-            const response = await fetch(endpoint,
-                        {
-                            method: "DELETE",
-                            headers : {
-                                    "Authorization": "Bearer " + token,
-                                    "Content-Type": "application/json"
-                                }
-                        }
-                    );
-                if (!response.ok) {
-                        const errorData = await response.json();
-                        throw new Error(errorData.detail);
-                    }
+            const response = await apiFetch(endpoint,options)
 
-                const data = await response.json();
-                setRefreshCount((e) => e + 1);
+            const data = await response.json();
+            setRefreshCount((e) => e + 1);
                 
         }
         catch(err) {
