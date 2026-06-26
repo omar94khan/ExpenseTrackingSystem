@@ -1,8 +1,10 @@
 from sqlalchemy.orm import Session
-from .models import Users, Transactions, UserCIF, Banks
+from .models import Users, Transactions, UserCIF, Banks, User_OTP
 from .schemas import UserCreate, TransactionCreate, BankCreate, BankDeleteRequest, CIFCreate, DeleteCIF
 from datetime import date
 import datetime as dt
+from . import schemas
+import random, string
 
 def create_user(db: Session, user: UserCreate, hashed_password: str):
     db_user = Users(username=user.username, hashed_password=hashed_password, created_on=user.created_on, isAdmin = False)
@@ -201,3 +203,92 @@ def fetch_banks(
         return None
     
     return db.query(Banks).all()
+
+
+################################################################################################
+
+def create_otp(
+        db: Session,
+        user_id : int,
+        email : str
+):
+    # We need to verify a couple of things.
+    #     1) The user exists
+    #     2) The email doesn't exist as a verified entry in the table already.
+    #     3) The user doesn't have any other entries in the OTP table.
+    
+    user = db.query(Users).filter(Users.id == user_id).first()
+    if not user:
+        return None
+    
+    email_exists = db.query(User_OTP).filter(
+                    User_OTP.email == email).filter(
+                        User_OTP.user_id != user_id).filter(
+                            User_OTP.verified == True).first()
+    if email_exists:
+        return None
+    
+    new_otp = ''.join(random.choices(string.digits,k=6))
+    new_expiry = dt.datetime.now() + dt.timedelta(minutes=5)
+    
+    existing_entry = db.query(User_OTP).filter(User_OTP.user_id == user_id).first()
+    if existing_entry:
+        # This is when the entry already exists
+        existing_entry.email = email
+        existing_entry.otp = new_otp
+        existing_entry.expiry = new_expiry
+        existing_entry.false_attempts = 0
+        existing_entry.verified = False
+
+        db.commit()
+        
+        return existing_entry
+
+    elif not existing_entry:
+        entry = {
+            "user_id" : user_id,
+            "email" : email,
+            "otp" : new_otp,
+            "expiry" : new_expiry,
+            "false_attempts" : 0,
+            "verified" : False 
+        }
+
+        posting = User_OTP(**entry)
+        db.add(posting)
+        db.commit()
+        db.refresh(posting)
+
+        return posting
+        
+
+def verifyOTP(
+        db: Session,
+        user_id : int,
+        payload: schemas.VerifyOTPRequest
+):
+    entered_otp = payload.otp
+    entered_email = payload.email
+
+    existing_entry  = db.query(User_OTP).filter(User_OTP.user_id == user_id).filter(User_OTP.email == entered_email).first()
+    if not existing_entry:
+        return None
+    if existing_entry.false_attempts >= 3:
+        return None
+    if existing_entry.expiry <= dt.datetime.now():
+        return None
+    
+    otp_match = existing_entry.otp == entered_otp
+
+    if not otp_match:
+        existing_entry.false_attempts += 1
+        db.commit()
+        return None
+    
+    existing_entry.verified = True
+    db.commit()
+
+    return existing_entry
+        
+
+

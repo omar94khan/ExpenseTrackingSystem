@@ -1,4 +1,4 @@
-from sqlalchemy import Column, Integer, String, Date, ForeignKey, Float, Boolean
+from sqlalchemy import Column, Integer, String, Date, ForeignKey, Float, Boolean, DateTime
 from sqlalchemy.orm import relationship
 from .database import Base
 
@@ -14,6 +14,7 @@ class Users(Base):
 
     transactions = relationship("Transactions", back_populates="transaction_user", cascade = "all, delete-orphan")
     cifs = relationship("UserCIF", back_populates="user_cifs", cascade = "all, delete-orphan")
+    otp = relationship("User_OTP", back_populates="user_otp", cascade = "all, delete-orphan")
     
 
 class Transactions(Base):
@@ -50,3 +51,17 @@ class Banks(Base):
 
     all_cifs = relationship("UserCIF", back_populates="bank_cifs", cascade = "all, delete-orphan")
  
+
+class User_OTP(Base):
+    __tablename__ = "user_otp"
+
+    id = Column(Integer, primary_key = True)
+    user_id = Column(Integer, ForeignKey("users.id"), nullable=False)
+    email = Column(String, nullable=False)
+    otp = Column(String, nullable=False)
+    expiry = Column(DateTime, nullable=False)
+    false_attempts = Column(Integer, nullable=False, default = 0)
+    verified = Column(Boolean, nullable = False, default = False)
+
+    user_otp = relationship("Users", back_populates="otp")
+

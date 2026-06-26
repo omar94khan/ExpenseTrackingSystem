@@ -170,3 +170,27 @@ class DeleteCIF(BaseModel):
     @classmethod
     def normalize_bank_key(cls, v):
         return v.upper()
+    
+##########################################################################################
+
+class CreateOTPRequest(BaseModel):
+    email : str
+    
+class CreateOTPOutput(BaseModel):
+    model_config = ConfigDict(from_attributes=True)
+
+    user_id : int
+    email : str
+
+
+class VerifyOTPRequest(BaseModel):
+    email : str
+    otp : str
+    
+class VerifyOTPResponse(BaseModel):
+    model_config = ConfigDict(from_attributes=True)
+
+    user_id: int
+    email : str
+    is_verified : bool
+    false_attempts : int
