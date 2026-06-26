@@ -2,7 +2,7 @@ from fastapi import APIRouter, Depends, HTTPException, BackgroundTasks
 from sqlalchemy.orm import Session
 from datetime import date
 import random, string
-from email_service import send_otp_email
+from ..email_service import send_otp_email
 
 from .. import crud, schemas, security, validations
 from ..deps import get_db, get_current_user, get_admin
