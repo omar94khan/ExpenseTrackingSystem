@@ -56,7 +56,7 @@ def create_transaction(db: Session, transaction: TransactionCreate, user_id: int
     return db_transaction
 
 def get_transactions(db: Session, user_id: int):
-    return db.query(Transactions).filter(Transactions.user_id == user_id).all()
+    return db.query(Transactions).filter(Transactions.user_id == user_id).order_by(Transactions.date).all()
 
 def delete_transaction(db: Session, transaction_id: int):
     

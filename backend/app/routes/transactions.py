@@ -35,7 +35,7 @@ def get_transactions(
 
     if not db_transactions:
         return []
-    print(db_transactions)
+    # print(db_transactions)
     return db_transactions
 
 ##############################################################################################################
