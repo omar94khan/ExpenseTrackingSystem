@@ -87,6 +87,7 @@ function FetchUsers({token, refreshCount, setRefreshCount}) {
                                         <td>{row.username}</td>
                                         <td>{row.created_on}</td>
                                         <td>{row.email ? row.email : "Not Available"}</td>
+                                        <td>{row.email_verified ? "True" : "False"}</td>
                                         <td>{row.isAdmin ? "Granted" : "Not Granted"}</td>
                                         <td><button onClick={() => deleteUser(row.id)}>Delete User</button></td>
                                         <td><button onClick={() => promoteUser(row.id, row.isAdmin ? false : true)}>Toggle Admin</button></td>
@@ -104,6 +105,7 @@ function FetchUsers({token, refreshCount, setRefreshCount}) {
                             <th>Username</th>
                             <th>Created On</th>
                             <th>Email</th>
+                            <th>Verified</th>
                             <th>Admin Rights</th>
                             <th></th>
                             <th></th>

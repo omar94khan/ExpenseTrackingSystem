@@ -55,6 +55,7 @@ class UserOut(BaseModel):
     username: str
     isAdmin: Optional[bool]
     email: Optional[str]
+    email_verified: Optional[bool]
 
     # class Config:
     #     orm_mode = True  # allows SQLAlchemy objects to be returned directly
@@ -196,4 +197,5 @@ class VerifyOTPResponse(BaseModel):
     id: int
     username:str
     email : str
+    email_verified : Optional[bool]
     

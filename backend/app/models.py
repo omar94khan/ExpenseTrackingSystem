@@ -12,6 +12,7 @@ class Users(Base):
     created_on = Column(Date, nullable=True)
     isAdmin = Column(Boolean, nullable = True)
     email = Column(String, nullable=True)
+    email_verified = Column(Boolean, nullable = True, default = False)
 
     transactions = relationship("Transactions", back_populates="transaction_user", cascade = "all, delete-orphan")
     cifs = relationship("UserCIF", back_populates="user_cifs", cascade = "all, delete-orphan")

@@ -7,7 +7,7 @@ from . import schemas
 import random, string
 
 def create_user(db: Session, user: UserCreate, hashed_password: str):
-    db_user = Users(username=user.username, hashed_password=hashed_password, created_on=user.created_on, isAdmin = False, email = user.email)
+    db_user = Users(username=user.username, hashed_password=hashed_password, created_on=user.created_on, isAdmin = False, email = user.email, email_verified = False)
     db.add(db_user)
     db.commit()
     db.refresh(db_user)
@@ -223,7 +223,9 @@ def create_otp(
     
     email_exists = db.query(Users).filter(
                     Users.email == email).filter(
-                        Users.id != user_id).first()
+                        Users.id != user_id).filter(
+                            Users.email_verified == True
+                        ).first()
     if email_exists:
         return "email_not_unique"
     
@@ -284,6 +286,7 @@ def verifyOTP(
     
     user_entry = db.query(Users).filter(Users.id == user_id).first()
     user_entry.email = entered_email
+    user_entry.email_verified = True
     db.commit()
 
     return user_entry
