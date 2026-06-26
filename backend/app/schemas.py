@@ -69,6 +69,7 @@ class UserOutAdmin(BaseModel):
     created_on: Optional[date]
     isAdmin: Optional[bool]
     email: Optional[str]
+    email_verified: Optional[bool]
 
     # class Config:
     #     orm_mode = True  # allows SQLAlchemy objects to be returned directly
