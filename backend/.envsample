@@ -1,11 +1,14 @@
-ENV = "local"
-DATABASE_URL = "sqlite:////database/transactions.db"
-SECRET_KEY = "randomstringhere"
-ALGORITHM = "HS256"
-ACCESS_TOKEN_EXPIRE_MINUTES = "60"
-CORS_ORIGINS = "*"
+ENV=local
+DATABASE_URL=sqlite:///./database/transactions.db
+SECRET_KEY = randomstringhere
+ALGORITHM = HS256
+ACCESS_TOKEN_EXPIRE_MINUTES = 60
+CORS_ORIGINS = *
 
-OIC_USERNAME = "basicauthusername"
-OIC_PASSWORD = "basicauthpassword"
+OIC_USERNAME = basicauthusername
+OIC_PASSWORD = basicauthpassword
 
-CARDLIST_API = "oicendpoint"
+CARDLIST_API = full endpoint
+
+SMTP_EMAIL_ADDRESS= full gmail address
+SMTP_PASSWORD= app password without spaces

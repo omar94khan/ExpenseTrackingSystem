@@ -4,7 +4,6 @@ from .schemas import UserCreate, TransactionCreate, BankCreate, BankDeleteReques
 from datetime import date
 import datetime as dt
 from . import schemas
-import random, string
 
 def create_user(db: Session, user: UserCreate, hashed_password: str):
     db_user = Users(username=user.username, hashed_password=hashed_password, created_on=user.created_on, isAdmin = False, email = user.email, email_verified = False)
@@ -210,7 +209,8 @@ def fetch_banks(
 def create_otp(
         db: Session,
         user_id : int,
-        email : str
+        email : str,
+        new_otp : str
 ):
     # We need to verify a couple of things.
     #     1) The user exists
@@ -229,7 +229,7 @@ def create_otp(
     if email_exists:
         return "email_not_unique"
     
-    new_otp = ''.join(random.choices(string.digits,k=6))
+    
     new_expiry = dt.datetime.now() + dt.timedelta(minutes=5)
     
     existing_entry = db.query(User_OTP).filter(User_OTP.user_id == user_id).first()

@@ -23,3 +23,6 @@ OIC_USERNAME = os.getenv("OIC_USERNAME","")
 OIC_PASSWORD = os.getenv("OIC_PASSWORD","")
 
 CARDLIST_API = os.getenv("CARDLIST_API","")
+
+SMTP_EMAIL_ADDRESS = os.getenv("SMTP_EMAIL_ADDRESS","")
+SMTP_PASSWORD = os.getenv("SMTP_PASSWORD","")
