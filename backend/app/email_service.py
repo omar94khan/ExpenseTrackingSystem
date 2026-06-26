@@ -1,6 +1,6 @@
 import smtplib
 from email.message import EmailMessage
-from config import SMTP_EMAIL_ADDRESS, SMTP_PASSWORD
+from .config import SMTP_EMAIL_ADDRESS, SMTP_PASSWORD
 
 def send_otp_email(to_address: str, otp_code: str):
     msg = EmailMessage()
