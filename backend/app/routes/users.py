@@ -1,7 +1,7 @@
 from fastapi import APIRouter, Depends, HTTPException, BackgroundTasks
 from sqlalchemy.orm import Session
 from datetime import date
-import random, string
+import secrets, string
 from ..email_service import send_otp_email
 
 from .. import crud, schemas, security, validations
@@ -117,7 +117,7 @@ def create_otp(
     user = Depends(get_current_user),
     db: Session = Depends(get_db)
 ):
-    new_otp = ''.join(random.choices(string.digits,k=6))
+    new_otp = ''.join(secrets.choice(string.digits) for _ in range(6))
     db_users = crud.create_otp(db = db, user_id=user.id, email=payload.email, new_otp=new_otp)
     
     if db_users == "user_does_not_exist":
