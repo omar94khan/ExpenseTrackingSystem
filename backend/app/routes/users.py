@@ -9,10 +9,14 @@ from ..deps import get_db, get_current_user, get_admin
 
 router = APIRouter(prefix="/users", tags=["users"])
 
+def generate_otp(n):
+    return ''.join(secrets.choice(string.digits) for _ in range(n))
+
 
 @router.post("/create", response_model=schemas.UserOut)
 def create_user(
     user: schemas.UserCreate,
+    background_tasks: BackgroundTasks,
     db: Session = Depends(get_db)
 ):
     
@@ -34,7 +38,22 @@ def create_user(
         user.created_on = date.today()
     
     hashed_password = security.hash_password(user.password)
-    return crud.create_user(db, user, hashed_password)
+
+    if user.email != "" and user.email is not None:
+        new_otp = generate_otp(6)
+    else:
+        new_otp = ""
+
+    
+    created_user = crud.create_user(db, user, hashed_password, new_otp)
+
+    if created_user == "email_not_unique":
+        raise HTTPException(status_code=400, detail="Email already in use.")
+
+    if new_otp != "":
+        background_tasks.add_task(send_otp_email,user.email, new_otp)
+
+    return created_user
 
 @router.post("/admin/promote", response_model=schemas.UserOutAdmin)
 def promote_user(
@@ -117,7 +136,7 @@ def create_otp(
     user = Depends(get_current_user),
     db: Session = Depends(get_db)
 ):
-    new_otp = ''.join(secrets.choice(string.digits) for _ in range(6))
+    new_otp = generate_otp(6)
     db_users = crud.create_otp(db = db, user_id=user.id, email=payload.email, new_otp=new_otp)
     
     if db_users == "user_does_not_exist":

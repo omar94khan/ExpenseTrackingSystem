@@ -5,11 +5,20 @@ from datetime import date
 import datetime as dt
 from . import schemas
 
-def create_user(db: Session, user: UserCreate, hashed_password: str):
+def create_user(db: Session, user: UserCreate, hashed_password: str, otp : str = None):
+    if user.email is not None and user.email != "":
+        unique_email = db.query(Users).filter(Users.email == user.email).filter(Users.email_verified == True).first()
+        if unique_email:
+            return "email_not_unique"
+    
     db_user = Users(username=user.username, hashed_password=hashed_password, created_on=user.created_on, isAdmin = False, email = user.email, email_verified = False)
     db.add(db_user)
     db.commit()
     db.refresh(db_user)
+
+    if otp is not None and otp != "" and user.email != "" and user.email is not None:
+        create_otp(db=db,user_id=db_user.id,email=user.email,new_otp=otp)
+
     return db_user
 
 
