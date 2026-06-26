@@ -14,6 +14,7 @@ export async function apiFetch(path, options = {}, { skipAuthRedirect = false } 
 
     if (response.status === 401 && !skipAuthRedirect) {
         localStorage.removeItem("token");
+        alert("Login expired. Logging out.")
         window.location.href = "/login";
         return;
     }

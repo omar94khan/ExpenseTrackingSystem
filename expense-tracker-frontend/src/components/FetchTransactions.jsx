@@ -21,7 +21,8 @@ function FetchTransactions({token, refreshCount, setRefreshCount}) {
                 setTransactions(data);
         }
         catch(err) {
-                throw alert("Error fetching transactions: "+err);
+                console.error("Error fetching transactions: "+err);
+                alert("Error fetching transactions: "+err);
             }
         finally {
             setLoading(false)
