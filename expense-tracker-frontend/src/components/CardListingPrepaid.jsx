@@ -107,7 +107,7 @@ function CardListingPrepaid({token, cards, loading}) {
     useEffect(() => 
                 {
                     setPrepaidCards(cards.creditCards?.cardsList?.filter((card) => isPrepaidCard(card)));
-                    console.log("List of prepaid cards: "+prepaidCards);
+                    // console.log("List of prepaid cards: "+prepaidCards);
                 },[cards])
     
     function populateTable() {

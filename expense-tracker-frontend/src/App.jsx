@@ -29,7 +29,7 @@ function App() {
     if (confirmed) {
       localStorage.removeItem("token");
       setLoginToken("");
-      console.log("reached the end")
+      // console.log("reached the end")
     }
   
   };

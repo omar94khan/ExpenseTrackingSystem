@@ -45,7 +45,8 @@ function FetchTransactions({token, refreshCount, setRefreshCount}) {
                 
         }
         catch(err) {
-                throw alert("Error deleting transaction: "+err);
+            console.error("Error deleting transaction: "+err);
+            alert("Error deleting transaction: "+err);
             }
         finally {
             setLoading(false)
@@ -57,18 +58,38 @@ function FetchTransactions({token, refreshCount, setRefreshCount}) {
         getTransactions();
     }, [refreshCount]);
 
+    function formatAmount(value, currency = 'BHD') {
+        const decimals = currency === 'BHD' ? 3 : 2;
+        return parseFloat(value).toFixed(decimals)
+    }
+
     function populateTable() {
-        return transactions.map((row) =>   <tr>
-                                        <td>{row.id}</td>
+        return transactions.map((row) =>   <tr key={row.id}>
                                         <td>{row.date}</td>
                                         <td>{row.transaction_type}</td>
                                         <td>{row.category}</td>
-                                        <td key={tranAmount}>{row.amount}</td>
+                                        <td style={{ textAlign: 'right' }}>{formatAmount(row.amount)}</td>
                                         <td>{row.description}</td>
                                         <td><button onClick={() => deleteTransactions(row.id)}>Delete Transaction</button></td>
                                     </tr>);
         };
 
+    function populateFooter() {
+        let totalSum = 0
+
+        transactions.forEach((row) => {
+            row.transaction_type.toLowerCase() === 'income' ? totalSum += row.amount : row.transaction_type.toLowerCase() === 'expense' ? totalSum -= row.amount : 0
+        })
+
+        return (<tr>
+                            <th></th>
+                            <th></th>
+                            <th></th>
+                            <th style={{ textAlign: 'right' }}>{formatAmount(totalSum)}</th>
+                            <th></th>
+                            <th></th>
+                        </tr>)
+    }
 
 
     return (<div>
@@ -76,11 +97,12 @@ function FetchTransactions({token, refreshCount, setRefreshCount}) {
                 <table>
                     <thead>
                         <tr>
-                            <th>S No</th>
-                            <th>Date</th>
+                            <th>
+                                Date
+                            </th>
                             <th>Transaction Type</th>
                             <th>Category</th>
-                            <th>Amount</th>
+                            <th itemID='tranAmount'>Amount</th>
                             <th>Description</th>
                             <th></th>
                         </tr>
@@ -90,15 +112,7 @@ function FetchTransactions({token, refreshCount, setRefreshCount}) {
                         {populateTable()}
                     </tbody>
                     <tfoot>
-                        <tr>
-                            <th>S No</th>
-                            <th>Date</th>
-                            <th>Transaction Type</th>
-                            <th>Category</th>
-                            <th>Amount</th>
-                            <th>Description</th>
-                            <th></th>
-                        </tr>
+                        {populateFooter()}
                     </tfoot>
                 </table>
             

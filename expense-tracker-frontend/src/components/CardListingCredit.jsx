@@ -110,7 +110,7 @@ function CardListingCredit({token, cards, loading}) {
     useEffect(() => 
                 {
                     setCreditCards(cards.creditCards?.cardsList?.filter((card) => isCreditCard(card)));
-                    console.log("List of Credit Cards: "+creditCards);
+                    // console.log("List of Credit Cards: "+creditCards);
                 },[cards])
     
     function populateTable() {
