@@ -43,6 +43,41 @@ def get_current_user(
     return user
 
 
+def get_verified_user(
+        token: str = Depends(oauth2_scheme), 
+        db: Session = Depends(get_db)
+        ):
+    
+    credentials_exception = HTTPException(
+        status_code=status.HTTP_401_UNAUTHORIZED,
+        detail="Could not validate credentials",
+        headers={"WWW-Authenticate": "Bearer"},
+    )
+
+    rights_exception = HTTPException(
+        status_code=status.HTTP_403_FORBIDDEN,
+        detail="User has not verified account"
+    )
+
+    try:
+        payload = security.decode_token(token)
+        user_id = payload.get("sub")
+        if user_id is None:
+            raise credentials_exception
+        user_id_int = int(user_id)
+    except (JWTError, ValueError):
+        raise credentials_exception
+
+    user = crud.get_user(db, user_id_int)
+    if user is None:
+        raise credentials_exception
+    
+    if user.email is None:
+        raise rights_exception
+    
+    return user
+
+
 def get_admin(
         token: str = Depends(oauth2_scheme), 
         db: Session = Depends(get_db)

@@ -7,7 +7,7 @@ from . import schemas
 import random, string
 
 def create_user(db: Session, user: UserCreate, hashed_password: str):
-    db_user = Users(username=user.username, hashed_password=hashed_password, created_on=user.created_on, isAdmin = False)
+    db_user = Users(username=user.username, hashed_password=hashed_password, created_on=user.created_on, isAdmin = False, email = user.email)
     db.add(db_user)
     db.commit()
     db.refresh(db_user)
@@ -219,14 +219,13 @@ def create_otp(
     
     user = db.query(Users).filter(Users.id == user_id).first()
     if not user:
-        return None
+        return "user_does_not_exist"
     
-    email_exists = db.query(User_OTP).filter(
-                    User_OTP.email == email).filter(
-                        User_OTP.user_id != user_id).filter(
-                            User_OTP.verified == True).first()
+    email_exists = db.query(Users).filter(
+                    Users.email == email).filter(
+                        Users.id != user_id).first()
     if email_exists:
-        return None
+        return "email_not_unique"
     
     new_otp = ''.join(random.choices(string.digits,k=6))
     new_expiry = dt.datetime.now() + dt.timedelta(minutes=5)
@@ -238,7 +237,6 @@ def create_otp(
         existing_entry.otp = new_otp
         existing_entry.expiry = new_expiry
         existing_entry.false_attempts = 0
-        existing_entry.verified = False
 
         db.commit()
         
@@ -250,8 +248,7 @@ def create_otp(
             "email" : email,
             "otp" : new_otp,
             "expiry" : new_expiry,
-            "false_attempts" : 0,
-            "verified" : False 
+            "false_attempts" : 0
         }
 
         posting = User_OTP(**entry)
@@ -272,23 +269,24 @@ def verifyOTP(
 
     existing_entry  = db.query(User_OTP).filter(User_OTP.user_id == user_id).filter(User_OTP.email == entered_email).first()
     if not existing_entry:
-        return None
+        return "otp_not_generated"
     if existing_entry.false_attempts >= 3:
-        return None
+        return "too_many_attempts"
     if existing_entry.expiry <= dt.datetime.now():
-        return None
+        return "otp_expired"
     
     otp_match = existing_entry.otp == entered_otp
 
     if not otp_match:
         existing_entry.false_attempts += 1
         db.commit()
-        return None
+        return "otp_not_correct"
     
-    existing_entry.verified = True
+    user_entry = db.query(Users).filter(Users.id == user_id).first()
+    user_entry.email = entered_email
     db.commit()
 
-    return existing_entry
+    return user_entry
         
 
 

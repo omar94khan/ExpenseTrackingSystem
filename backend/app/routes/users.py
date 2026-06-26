@@ -106,3 +106,41 @@ def delete_user(
         raise HTTPException(status_code=404, detail="User doesn't exists")
     
     return deleted_user
+
+
+@router.post("/otp/create", response_model=schemas.CreateOTPOutput)
+def create_otp(
+    payload : schemas.CreateOTPRequest,
+    user_id = Depends(get_current_user),
+    db: Session = Depends(get_db)
+):
+    db_users = crud.create_otp(db = db, user_id=user_id, email=payload.email)
+    
+    if db_users == "user_does_not_exist":
+        raise HTTPException(status_code=404, detail="User does not exist")
+    elif db_users == "email_not_unique":
+        raise HTTPException(status_code=409, detail="Email already in use")
+    
+    
+    return db_users
+
+
+@router.post("/otp/verify", response_model=schemas.VerifyOTPResponse)
+def verify_otp(
+    payload : schemas.VerifyOTPRequest,
+    user_id = Depends(get_current_user),
+    db: Session = Depends(get_db)
+):
+    verification = crud.verifyOTP(db = db, user_id=user_id, payload=payload)
+    
+    if verification == "otp_not_generated":
+        raise HTTPException(status_code=404, detail="OTP Not Generated")
+    elif verification == "too_many_attempts":
+        raise HTTPException(status_code=401, detail="Too many failed attempts")
+    elif verification == "otp_expired":
+        raise HTTPException(status_code=403, detail="OTP Expired")
+    elif verification == "otp_not_correct":
+        raise HTTPException(status_code=406, detail="OTP Incorrect")
+    
+    
+    return verification

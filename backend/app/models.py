@@ -11,6 +11,7 @@ class Users(Base):
     hashed_password = Column(String, nullable=False)
     created_on = Column(Date, nullable=True)
     isAdmin = Column(Boolean, nullable = True)
+    email = Column(String, nullable=True)
 
     transactions = relationship("Transactions", back_populates="transaction_user", cascade = "all, delete-orphan")
     cifs = relationship("UserCIF", back_populates="user_cifs", cascade = "all, delete-orphan")
@@ -61,7 +62,6 @@ class User_OTP(Base):
     otp = Column(String, nullable=False)
     expiry = Column(DateTime, nullable=False)
     false_attempts = Column(Integer, nullable=False, default = 0)
-    verified = Column(Boolean, nullable = False, default = False)
 
     user_otp = relationship("Users", back_populates="otp")
 

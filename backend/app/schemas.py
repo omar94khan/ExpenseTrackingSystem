@@ -20,6 +20,7 @@ class UserCreate(BaseModel):
     password: str  # plaintext for request; you will hash it before saving
     created_on: Optional[date] = None
     isAdmin: Optional[bool] = False
+    email: Optional[str] = None
 
 class TransactionCreate(BaseModel):
     amount: float
@@ -53,6 +54,7 @@ class UserOut(BaseModel):
     id: int
     username: str
     isAdmin: Optional[bool]
+    email: Optional[str]
 
     # class Config:
     #     orm_mode = True  # allows SQLAlchemy objects to be returned directly
@@ -65,6 +67,7 @@ class UserOutAdmin(BaseModel):
     username: str
     created_on: Optional[date]
     isAdmin: Optional[bool]
+    email: Optional[str]
 
     # class Config:
     #     orm_mode = True  # allows SQLAlchemy objects to be returned directly
@@ -190,7 +193,7 @@ class VerifyOTPRequest(BaseModel):
 class VerifyOTPResponse(BaseModel):
     model_config = ConfigDict(from_attributes=True)
 
-    user_id: int
+    id: int
+    username:str
     email : str
-    is_verified : bool
-    false_attempts : int
+    

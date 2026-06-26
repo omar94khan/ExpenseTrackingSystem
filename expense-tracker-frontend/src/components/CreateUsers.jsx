@@ -9,6 +9,7 @@ function CreateUsers({token, refreshCount, setRefreshCount}) {
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
     const [date, setDate] = useState(getTodayDate());
+    const [email, setEmail] = useState();
 
     function getTodayDate() {
         const today = new Date();
@@ -36,7 +37,8 @@ function CreateUsers({token, refreshCount, setRefreshCount}) {
             body: JSON.stringify({
                     "username" : username,
                     "password" : password,
-                    "created_on" : date
+                    "email" : email,
+                    // "created_on" : date
                 })
         }
         setLoading(true)
@@ -49,6 +51,7 @@ function CreateUsers({token, refreshCount, setRefreshCount}) {
             setRefreshCount((e) => e+1);
             setUsername("");
             setPassword("");
+            setEmail("");
             setDate(getTodayDate());
         }
 
@@ -84,23 +87,30 @@ function CreateUsers({token, refreshCount, setRefreshCount}) {
                         <tr>
                             <th>Username</th>
                             <td>
-                                <input type='text' value={username} onChange={(e) => setUsername(e.target.value)} />
+                                <input type='text' value={username} placeholder='user123' onChange={(e) => setUsername(e.target.value)} />
                             </td>
                         </tr>
                         
                         <tr>
                             <th>Password</th>
                             <td>
-                                <input type='password' value={password} onChange={(e) => setPassword(e.target.value)} />
+                                <input type='password' value={password} placeholder='pA$$w0rd!' onChange={(e) => setPassword(e.target.value)} />
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <th>Email</th>
+                            <td>
+                                <input type='text' value={email} placeholder='abc@gmail.com' onChange={(e) => setEmail(e.target.value)} />
                             </td>
                         </tr>
                         
-                        <tr>
+                        {/* <tr>
                             <th>Date</th>
                             <td>
                                 <input type='date' value={date} onChange={(e) => setDate(e.target.value)} />
                             </td>
-                        </tr>
+                        </tr> */}
                         
                         <tr>
                             <button onClick={() => CreateUser()}>Create User</button>
