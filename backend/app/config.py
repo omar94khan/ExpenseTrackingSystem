@@ -13,7 +13,10 @@ ENV = os.getenv("ENV", "local") # change to production in prod environment
 
 DATABASE_URL = os.getenv("DATABASE_URL", "sqlite:///./database/transactions.db")
 
-SECRET_KEY = os.getenv("SECRET_KEY", "1d5as61f561g561gdfa4g51g5615f6sda23")  # must be overridden in prod
+SECRET_KEY = os.getenv("SECRET_KEY")  # must be overridden in prod
+if not SECRET_KEY:
+    raise RuntimeError("SECRET_KEY environment variable must be set — refusing to start with no signing key.")
+
 ALGORITHM = os.getenv("ALGORITHM", "HS256")
 ACCESS_TOKEN_EXPIRE_MINUTES = int(os.getenv("ACCESS_TOKEN_EXPIRE_MINUTES", "60"))
 
