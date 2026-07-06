@@ -1,17 +1,33 @@
+/* ===== GLOBAL RESET ===== */
 * {
-    box-sizing:border-box;
+    box-sizing: border-box;   /* ONE reset, border-box everywhere. Do NOT override this later. */
     margin: 0;
     padding: 0;
 }
 
-body {
+/* ===== BASE STYLES ===== */
+html, body {
+    height: 100%;             /* Needed so 100vh children resolve correctly */
     font-family: sans-serif;
     background-color: #f5f5f5;
+}
+
+/* 
+   Body padding + max-width only applies to NON-layout pages (login, user create).
+   The layout container manages its own spacing.
+*/
+body {
     padding: 20px;
-    /* max-width: 1200px; */
+    max-width: 1200px;
     margin: 0 auto;
 }
 
+/* ===== TYPOGRAPHY ===== */
+h1 { margin-bottom: 25px; }
+h2 { margin-bottom: 20px; }
+h3 { margin-bottom: 10px; margin-top: 20px; }
+
+/* ===== TABLE STYLES ===== */
 table {
     width: 100%;
     border-collapse: collapse;
@@ -28,6 +44,7 @@ th {
     background-color: #f0f0f0;
 }
 
+/* ===== FORM ELEMENTS ===== */
 button {
     padding: 8px 16px;
     cursor: pointer;
@@ -41,85 +58,82 @@ input, select {
 }
 
 .formButtons {
-  border: 1.5px solid black;
-  margin-right: 10px;
+    border: 1.5px solid black;
+    margin-right: 10px;
 }
 
 .warning-message {
-  font-size: medium;
-  color: red;
-  text-align: left;
-  font-weight: bold;
+    font-size: medium;
+    color: red;
+    text-align: left;
+    font-weight: bold;
 }
 
-h1 {
-  margin-bottom: 25px;
-}
+/* =========================================================
+   LAYOUT — Sidebar + Main Content
+   ========================================================= */
 
-h2 {
-  margin-bottom: 20px;
-}
-
-h3 {
-  margin-bottom: 10px;
-  margin-top: 20px
-}
-
-/* Layout.css */
-* {
-  margin: 0;
-  /* box-sizing: border-box; */
-  box-sizing: content-box;
-}
-
-/* Flexbox container for sidebar and main content */
+/*
+   The layout-container breaks out of body's padding/max-width
+   so it can span the full viewport. This is intentional:
+   body constraints are for standalone pages, not the app shell.
+*/
 .layout-container {
-  display:flex;
-  /* height: 100vh; Takes full viewport height */
-  width: auto;
+    display: flex;
+    min-height: 100vh;        /* AT LEAST full viewport — grows if content needs more */
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    /* width: 100vw;             Full viewport width */
+    /* margin: -20px;            Cancel out body's 20px padding */
+    /* max-width: none;          Override body's max-width inheritance */
 }
 
-/* Sidebar styling (Left Navigation) */
+/* --- Sidebar --- */
 .sidebar {
-  width: 150px;
-  background-color: #6e8268;
-  color: #ffffff;
-  display:flex;
-  flex-direction: column;
-  flex-shrink: 0; /* Prevents sidebar from shrinking on smaller screens */
-  box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
+    width: 200px;
+    background-color: #6e8268;
+    color: #ffffff;
+    display: flex;
+    flex-direction: column;
+    flex-shrink: 0;           /* Never compress the sidebar */
+    box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
 }
 
 .sidebar-header {
-  padding: 20px;
-  background-color: #6e8268;
-  border-bottom: 1px solid #6e8268;
+    padding: 20px;
+    background-color: #6e8268;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.15);
 }
 
 .sidebar-nav {
-  display: flex;
-  flex-direction: column;
-  padding: 0cqmax;
+    display: flex;
+    flex-direction: column;
+    padding: 0;
 }
 
 .sidebar-nav a {
-  padding: 15px 20px;
-  color: #b3b3d1;
-  text-decoration: none;
-  font-weight: 500;
-  transition: all 0.3s ease;
+    padding: 15px 20px;
+    color: #d4e3d0;
+    text-decoration: none;
+    font-weight: 500;
+    transition: all 0.3s ease;
+    border-left: 4px solid transparent;   /* Reserve space so text doesn't shift on hover */
 }
 
 .sidebar-nav a:hover {
-  background-color: #d1d1d5;
-  color: #ffffff;
-  border-left: 4px solid #6e8268; /* Left indicator border */
+    background-color: #5a6b55;
+    color: #ffffff;
+    border-left: 4px solid #ffffff;
 }
 
 .sidebar-nav .logoutButton {
     background: none;
     border: none;
-    color: #b3b3d1;
+    border-left: 4px solid transparent;   /* Match the links */
+    color: #d4e3d0;
     font-weight: 500;
     font-size: inherit;
     padding: 15px 20px;
@@ -131,41 +145,129 @@ h3 {
 }
 
 .sidebar-nav .logoutButton:hover {
-    background-color: #d1d1d5;
+    background-color: #5a6b55;
     color: #ffffff;
-    border-left: 4px solid #6e8268;
+    border-left: 4px solid #ffffff;
 }
 
-/* Main Content Area */
+/* --- Main Content --- */
 .main-content {
-  flex-grow: 1; /* Fills the rest of the screen space */
-  background-color: #f4f7f6;
-  padding: 30px;
-  overflow-y: auto; /* Adds scrollbar if page content is too tall */
+    flex-grow: 1;
+    background-color: #f4f7f6;
+    padding: 30px;
+    overflow-y: auto;
 }
 
-
-
-/* Responsive adjustment for small screens */
-@media (max-width: 360px) {
-  .layout-container {
-    flex-direction: column;
-  }
-
-  .sidebar {
-    width: 50%;
-    height: auto;
-  }
-  
-  .sidebar-nav a {
-    text-align: center;
-  }
-}
-
+/* ===== COMPONENT-SPECIFIC ===== */
 .bank-management-div {
-  margin-bottom: 50px;
+    margin-bottom: 50px;
+}
 
-  h3 {
+.bank-management-div h3 {
     margin-bottom: 15px;
-  }
+}
+
+
+/* =========================================================
+   RESPONSIVE — Tablets and smaller (768px and below)
+   ========================================================= */
+@media (max-width: 768px) {
+
+    body {
+        padding: 0;           /* Remove body padding on mobile */
+    }
+
+    .layout-container {
+        flex-direction: column;   /* Stack sidebar on top, content below */
+        margin: 0;                /* No negative margin trick needed anymore */
+        width: 100%;
+    }
+
+    .sidebar {
+        width: 100%;              /* Full width bar across the top */
+        flex-shrink: 1;           /* Allow it to be compact */
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);  /* Shadow below instead of right */
+    }
+
+    .sidebar-header {
+        padding: 12px 16px;
+    }
+
+    .sidebar-header h2 {
+        font-size: 1.1rem;
+        margin-bottom: 0;
+    }
+
+    .sidebar-nav {
+        flex-direction: row;      /* Links side by side, horizontally scrollable */
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+        padding: 0;
+    }
+
+    .sidebar-nav a {
+        padding: 10px 14px;
+        white-space: nowrap;      /* Prevent link text from wrapping */
+        font-size: 0.85rem;
+        border-left: none;
+        border-bottom: 3px solid transparent;   /* Indicator moves to bottom on horizontal layout */
+    }
+
+    .sidebar-nav a:hover {
+        border-left: none;
+        border-bottom: 3px solid #ffffff;
+        background-color: #5a6b55;
+    }
+
+    .sidebar-nav .logoutButton {
+        padding: 10px 14px;
+        white-space: nowrap;
+        font-size: 0.85rem;
+        border-left: none;
+        border-bottom: 3px solid transparent;
+        width: auto;              /* Don't force full width in horizontal layout */
+    }
+
+    .sidebar-nav .logoutButton:hover {
+        border-left: none;
+        border-bottom: 3px solid #ffffff;
+        background-color: #5a6b55;
+    }
+
+    .main-content {
+        padding: 16px;
+    }
+
+    /* Tables scroll horizontally on small screens instead of breaking layout */
+    table {
+        display: block;
+        overflow-x: auto;
+    }
+
+    input, select {
+        width: 100%;
+    }
+}
+
+/* =========================================================
+   RESPONSIVE — Small phones (400px and below)
+   ========================================================= */
+@media (max-width: 400px) {
+
+    .sidebar-header h2 {
+        font-size: 0.95rem;
+    }
+
+    .sidebar-nav a,
+    .sidebar-nav .logoutButton {
+        padding: 8px 10px;
+        font-size: 0.78rem;
+    }
+
+    .main-content {
+        padding: 12px;
+    }
+
+    h1 { font-size: 1.3rem; }
+    h2 { font-size: 1.1rem; }
 }
