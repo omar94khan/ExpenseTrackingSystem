@@ -2,7 +2,7 @@ import httpx
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
 from .. import config
-from ..deps import get_current_user
+from ..deps import get_verified_user
 from ..services import getlistofcards
 from fastapi import status
 
@@ -18,7 +18,7 @@ async def getList(
     bank_key : str,
     cif: str,
     db: Session = Depends(get_db),
-    current_user = Depends(get_current_user)
+    current_user = Depends(get_verified_user)
     ):
 
     response = await getlistofcards(bank_key=bank_key, cif_id = cif, db=db, user_id = current_user.id)

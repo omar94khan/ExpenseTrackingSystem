@@ -212,11 +212,9 @@ Both do the same thing — look up the user by username, verify the password, an
 |---|---|---|---|---|
 | POST | `/users` | No | JSON `UserCreate` | `UserOut` |
 | GET | `/users/{user_id}` | No | — | `UserOut` |
-| GET | `/users/by-username/{username}` | No | — | `UserOut` |
 | DELETE | `/users/{user_id}` | **Yes** | — | `UserOut` |
 
 - **Registration (`POST /users`)** validates username and password, checks for username collision, defaults `created_on` to today if not supplied, hashes the password, and creates the user. It is intentionally open (no auth) — this is how new accounts get created.
-- **Lookups** (`GET /users/{id}`, `GET /users/by-username/{username}`) are unauthenticated and return only `UserOut` (id + username — never the hash).
 - **Delete (`DELETE /users/{user_id}`)** requires a valid token, and the authorization check is `current_user.id != user_id` — a user can only delete their own account. There is no separate admin-delete path in this version.
 
 ### 12.3 Transactions (`/transactions`) — `transactions.py`
@@ -239,8 +237,6 @@ Both do the same thing — look up the user by username, verify the password, an
 POST   /auth/login              (public)
 POST   /auth/login-json         (public)
 POST   /users                   (public)
-GET    /users/{user_id}         (public)
-GET    /users/by-username/{u}   (public)
 DELETE /users/{user_id}         (self only)
 POST   /transactions/           (auth)
 GET    /transactions/           (auth)
@@ -315,7 +311,6 @@ These aren't bugs in the sense of crashing anything — they're just things wort
 - **`validate_transaction_type`'s normalized return value is discarded.** The route calls it for its side effect of *raising* on invalid input, but then passes the original (non-normalized) `transaction` object into `crud.create_transaction`. So whatever casing the client sent is what actually gets stored — the capitalization normalization never reaches the database.
 - **Broad `except:` clauses in route validation.** In `users.py` and `transactions.py`, validation failures are caught with bare `except:` and replaced with a generic message (e.g., `"Invalid username"`), discarding the specific reason from the `ValueError` (e.g., "must be alphanumeric" vs. "too short"). Functionally fine, but the client never sees *why* something failed.
 - **`ReportOut` schema isn't actually enforced.** It defines `number_of_transactions` and `net_balance`, but `/transactions/fetch-report/` has no `response_model=schemas.ReportOut`, and `analyze_report()` doesn't compute either of those two fields — only `transaction_month`, `total_income`, `total_expense`, and `most_common_expense_category` are populated. The schema and the actual response have drifted apart.
-- **No role/admin concept exists in this snapshot.** `Users` has no `isAdmin` field, and there's no admin-gated route anywhere — user lookups (`GET /users/{id}`, `GET /users/by-username/{username}`) are fully public and return any user's `id`/`username` to anyone.
 - **Debug `print()` calls ship in `fetch_report` and `get_transactions`.** Harmless, but they'll spam stdout in production logs.
 - **`docker-compose.yml`'s named volume path may not align with the SQLite file's actual location** — worth verifying where the `.db` file actually lands relative to the mount.
 
