@@ -1,5 +1,5 @@
 * {
-    box-sizing: border-box;
+    box-sizing:border-box;
     margin: 0;
     padding: 0;
 }
@@ -8,7 +8,7 @@ body {
     font-family: sans-serif;
     background-color: #f5f5f5;
     padding: 20px;
-    max-width: 1200px;
+    /* max-width: 1200px; */
     margin: 0 auto;
 }
 
@@ -74,9 +74,9 @@ h3 {
 
 /* Flexbox container for sidebar and main content */
 .layout-container {
-  display: flex;
-  height: 100vh; /* Takes full viewport height */
-  width: 80vw;
+  display:flex;
+  /* height: 100vh; Takes full viewport height */
+  width: auto;
 }
 
 /* Sidebar styling (Left Navigation) */
@@ -84,7 +84,7 @@ h3 {
   width: 150px;
   background-color: #6e8268;
   color: #ffffff;
-  display: flex;
+  display:flex;
   flex-direction: column;
   flex-shrink: 0; /* Prevents sidebar from shrinking on smaller screens */
   box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
