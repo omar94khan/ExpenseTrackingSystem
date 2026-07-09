@@ -68,6 +68,14 @@ def promote_user(
         raise HTTPException(status_code=404, detail="The user you are trying to promote does not exist")
     
     return db_users
+    
+
+@router.get('/fetchMe', response_model=schemas.UserOut)
+def fetch_current_user(
+    db: Session=Depends(get_db),
+    user = Depends(get_current_user)
+):
+    return crud.get_user_by_username(db=db, username=user.username)
 
 @router.get('/fetchAll', response_model=list[schemas.UserOutAdmin]) #
 def get_all_users(

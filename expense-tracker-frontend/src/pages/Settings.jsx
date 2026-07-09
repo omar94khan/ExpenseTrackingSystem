@@ -10,6 +10,7 @@ function Settings({token}) {
                 <h1>Settings</h1>
 
                 <ul>
+                    <li> <Link to="/settings/EmailVerification">Verify Email</Link> </li>
                     <li> <Link to="/settings/CIFManagement">Manage CIFs</Link> </li>
                 </ul>
             </div>
