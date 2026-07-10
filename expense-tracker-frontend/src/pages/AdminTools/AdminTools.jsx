@@ -10,7 +10,7 @@ function AdminTools({token}) {
     return <div>
                 <h1>Admin Control Panel</h1>
 
-                <ul>
+                <ul className='menuList'>
                     <li> <Link to="/admintools/bankManagement">Manage Banks</Link> </li>
                     <li> <Link to="/admintools/usersManagement">Manage Users</Link> </li>
                 </ul>

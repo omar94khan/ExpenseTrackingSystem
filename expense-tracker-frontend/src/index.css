@@ -88,6 +88,49 @@ input, select {
   margin-right: 10px;
 }
 
+/* Sidebar menu container */
+.menuList {
+  list-style-type: none;
+  padding: 0;
+  margin: 20px 0;
+  max-width: 280px;
+  font-family: system-ui, -apple-system, sans-serif;
+  background-color: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 10px;
+  overflow: hidden;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+}
+
+/* Row dividers */
+.menuList li {
+  border-bottom: 1px solid #f1f5f9;
+}
+
+.menuList li:last-child {
+  border-bottom: none;
+}
+
+/* React-Router Link styling */
+.menuList a {
+  display: block;
+  padding: 14px 20px;
+  color: #334155;
+  text-decoration: none;
+  font-weight: 500;
+  font-size: 15px;
+  transition: all 0.2s ease-in-out;
+}
+
+/* Hover and keyboard focus states */
+.menuList a:hover,
+.menuList a:focus {
+  background-color: #f8fafc;
+  color: #2563eb;
+  padding-left: 24px; /* Subtle slide effect */
+  outline: none;
+}
+
 /* =========================================================
    LAYOUT — Sidebar + Main Content
    ========================================================= */
