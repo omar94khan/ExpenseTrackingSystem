@@ -17,6 +17,26 @@ class Users(Base):
     transactions = relationship("Transactions", back_populates="transaction_user", cascade = "all, delete-orphan")
     cifs = relationship("UserCIF", back_populates="user_cifs", cascade = "all, delete-orphan")
     otp = relationship("User_OTP", back_populates="user_otp", cascade = "all, delete-orphan")
+    accounts = relationship("Accounts", back_populates="user_accounts", cascade = "all, delete-orphan")
+
+class Accounts(Base):
+    __tablename__ = "accounts"
+
+    id = Column(Integer, primary_key=True)
+    user_id = Column(Integer, ForeignKey("users.id"), nullable=False)
+    cif_id = Column(Integer, ForeignKey("UserCIF.id"), nullable=True)
+    bank_id = Column(Integer, ForeignKey("config_banks.id"), nullable=True)
+    account_name = Column(String, nullable=False)
+    account_number = Column(String, nullable=True)
+    account_iban = Column(String, nullable=True)
+
+    user_accounts = relationship("Users", back_populates = "accounts")
+    all_accounts = relationship("Banks", back_populates = "accounts")
+    transfers_out = relationship("Transfers", back_populates = "transfers_out", cascade = "all, delete-orphan")
+    transfers_in = relationship("Transfers", back_populates = "transfers_in", cascade = "all, delete-orphan")
+    transactions = relationship("Transactions", back_populates = "all_transactions", cascade = "all,delete-orphan")
+
+
     
 
 class Transactions(Base):
@@ -29,8 +49,25 @@ class Transactions(Base):
     category = Column(String)
     date = Column(Date, nullable = False)
     description = Column(String)
+    account_id = Column(Integer, ForeignKey("accounts.id"), nullable=True)
 
     transaction_user = relationship("Users", back_populates="transactions")
+    all_transactions = relationship("Accounts", back_populates="transactions")
+    
+
+class Transfers(Base):
+    __tablename__ = "transfers"
+
+    id = Column(Integer, primary_key=True)
+    debit_account = Column(Integer, ForeignKey("accounts.id"), nullable=False)
+    credit_account = Column(Integer, ForeignKey("accounts.id"), nullable=False)
+    amount = Column(Float, nullable=False)
+    date = Column(Date, nullable=False)
+    description = Column(String, nullable=True)
+
+    transfers_out = relationship("Accounts", back_populates = "transfers_out", foreign_keys = [debit_account])
+    transfers_in = relationship("Accounts", back_populates = "transfers_in", foreign_keys = [credit_account])
+
 
 class UserCIF(Base):
     __tablename__ = "UserCIF"
@@ -52,6 +89,7 @@ class Banks(Base):
     bank_bic = Column(String, nullable = True)
 
     all_cifs = relationship("UserCIF", back_populates="bank_cifs", cascade = "all, delete-orphan")
+    accounts = relationship("Accounts", back_populates="all_accounts", cascade = "all, delete-orphan")
  
 
 class User_OTP(Base):

@@ -35,7 +35,7 @@ function EmailVerification({token}) {
 
 
     async function sendOTP() {
-        if (email === user?.email) {
+        if (email === user?.email && user?.email_verified) {
             throw alert("This email is already verified. Please enter a different email, or go back.");
             return;
         }
