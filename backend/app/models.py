@@ -32,8 +32,8 @@ class Accounts(Base):
 
     user_accounts = relationship("Users", back_populates = "accounts")
     all_accounts = relationship("Banks", back_populates = "accounts")
-    transfers_out = relationship("Transfers", back_populates = "transfers_out", cascade = "all, delete-orphan")
-    transfers_in = relationship("Transfers", back_populates = "transfers_in", cascade = "all, delete-orphan")
+    all_transfers_out = relationship("Transfers", back_populates = "debit_account_rel")
+    all_transfers_in = relationship("Transfers", back_populates = "credit_account_rel")
     transactions = relationship("Transactions", back_populates = "all_transactions", cascade = "all,delete-orphan")
 
 
@@ -65,8 +65,8 @@ class Transfers(Base):
     date = Column(Date, nullable=False)
     description = Column(String, nullable=True)
 
-    transfers_out = relationship("Accounts", back_populates = "transfers_out", foreign_keys = [debit_account])
-    transfers_in = relationship("Accounts", back_populates = "transfers_in", foreign_keys = [credit_account])
+    debit_account_rel = relationship("Accounts", back_populates = "all_transfers_out", foreign_keys = [debit_account])
+    credit_account_rel = relationship("Accounts", back_populates = "all_transfers_in", foreign_keys = [credit_account])
 
 
 class UserCIF(Base):
