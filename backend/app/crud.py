@@ -1,5 +1,5 @@
 from sqlalchemy.orm import Session
-from .models import Users, Transactions, UserCIF, Banks, User_OTP
+from .models import Users, Transactions, UserCIF, Banks, User_OTP, Accounts
 from .schemas import UserCreate, TransactionCreate, BankCreate, BankDeleteRequest, CIFCreate, DeleteCIF
 from datetime import date
 import datetime as dt
@@ -300,5 +300,34 @@ def verifyOTP(
 
     return user_entry
         
+
+def create_account(
+        db: Session,
+        user_id : int,
+        payload: schemas.AccountsCreate
+):
+    
+    if payload.bank_id and payload.account_number:
+        duplicate_check = db.query(Accounts).filter(
+                Accounts.user_id == user_id
+            ).filter(
+                Accounts.bank_id == payload.bank_id
+            ).filter(
+                Accounts.account_number == payload.account_number
+            ).first()
+        
+        if duplicate_check:
+            return "account_exists"
+        
+    entry = payload.model_dump()
+    entry["user_id"] = user_id
+        
+    create_account_query = Accounts(**entry)
+    db.add(create_account_query)
+    db.commit()
+    db.refresh(create_account_query)
+
+    return create_account_query
+    
 
 

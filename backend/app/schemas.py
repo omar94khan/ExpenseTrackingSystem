@@ -200,4 +200,22 @@ class VerifyOTPResponse(BaseModel):
     username:str
     email : str
     email_verified : Optional[bool]
+
+
+class AccountsCreate(BaseModel):
     
+    bank_id : int
+    account_name : Optional[str]
+    account_number : str
+    account_iban : Optional[str]
+    cif_id : Optional[int]
+
+
+class AccountCreateOut(BaseModel):
+    model_config = ConfigDict(from_attributes=True)
+
+    cif_id : Optional[int]
+    bank_id : int
+    account_number : str
+    account_iban : Optional[str]
+    account_name : Optional[str]
